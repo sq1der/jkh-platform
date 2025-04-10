@@ -9,11 +9,8 @@ from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from rest_framework.parsers import MultiPartParser
-from openpyxl import load_workbook
 
 User = get_user_model()
 
@@ -21,6 +18,31 @@ class DebtorViewSet(viewsets.ModelViewSet):
     queryset = Debtor.objects.all()
     serializer_class = DebtorSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['full_name', 'iin']
+    ordering_fields = ['full_name', 'last_payment', 'current_debt']
+    ordering = ['full_name']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        request = self.request
+
+        from_date = request.query_params.get('from_date')
+        to_date = request.query_params.get('to_date')
+        if from_date and to_date:
+            queryset = queryset.filter(last_payment__range=[from_date, to_date])
+
+        overdue_days = request.query_params.get('overdue_days')
+        if overdue_days:
+            cutoff_date = timezone.now().date() - timedelta(days=int(overdue_days))
+            queryset = queryset.filter(last_payment__lt=cutoff_date)
+
+        status = request.query_params.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+
+        return queryset
+
 
 class BuildingViewSet(viewsets.ModelViewSet):
     queryset = Building.objects.all()
@@ -72,36 +94,3 @@ class LoginWithIINView(APIView):
             user = serializer.validated_data['user']
             return Response({'message': 'Успешный вход по ИИН', 'role': user.role})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class DebtViewSet(viewsets.ModelViewSet):
-    queryset = Debtor.objects.all().order_by('-last_payment')
-    serializer_class = DebtorSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    
-    filterset_fields = {
-        'last_payment': ['gte', 'lte'],  # фильтрация по периоду
-        'debt_amount': ['gte', 'lte'],        # фильтрация по сумме долга
-    }
-    search_fields = ['full_name', 'iin']      # поиск по имени или ИИН
-    ordering_fields = ['last_payment', 'debt_amount']  # сортировка
-
-class ExcelUploadView(APIView):
-    parser_classes = [MultiPartParser]
-
-    def post(self, request, *args, **kwargs):
-        excel_file = request.FILES['file']
-        wb = load_workbook(filename=excel_file)
-        sheet = wb.active
-        
-        for row in sheet.iter_rows(min_row=2, values_only=True):
-            full_name, address, last_payment, debt_amount, iin = row
-            Subscriber.objects.update_or_create(
-                iin=iin,
-                defaults={
-                    'full_name': full_name,
-                    'address': address,
-                    'last_payment_date': datetime.strptime(str(last_payment), '%d.%m.%Y').date(),
-                    'debt_amount': debt_amount
-                }
-            )
-        return Response({'status': 'uploaded'})
