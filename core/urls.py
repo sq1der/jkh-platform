@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView
+from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/debt/<str:iin>/', DebtSearchView.as_view(), name='debt-search'),
     path('login/email/', LoginWithEmailView.as_view(), name='login-email'),
     path('login/iin/', LoginWithIINView.as_view(), name='login-iin'),
+    path('upload/', ExcelUploadView.as_view(), name='excel-upload'),
 ]

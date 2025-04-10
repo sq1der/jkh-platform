@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from .utils import process_excel_upload
 
 User = get_user_model()
 
@@ -93,4 +94,13 @@ class LoginWithIINView(APIView):
         if serializer.is_valid():
             user = serializer.validated_data['user']
             return Response({'message': 'Успешный вход по ИИН', 'role': user.role})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ExcelUploadView(APIView):
+    def post(self, request):
+        serializer = ExcelUploadSerializer(data=request.data)
+        if serializer.is_valid():
+            upload = serializer.save(user=request.user) 
+            process_excel_upload(upload.id)
+            return Response({'status': 'File uploaded and processing started.'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'corsheaders', 
     'openpyxl',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [

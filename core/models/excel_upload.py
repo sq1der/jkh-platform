@@ -9,13 +9,14 @@ class ExcelUpload(models.Model):
         ('completed', 'Успешно'),
         ('error', 'С ошибками'),
     ]
-    
+
+    file = models.FileField(upload_to='uploads/')
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     file_name = models.CharField(max_length=255)  
-    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)  
     uploaded_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=20, choices=UPLOAD_STATUS_CHOICES, default='in_progress') 
-    error_log = models.JSONField(default=dict, blank=True)
+    error_log = models.JSONField(default=dict, blank=True, null=True)
     
     def __str__(self):
         return f"Upload {self.file_name} by {self.uploaded_by}"
