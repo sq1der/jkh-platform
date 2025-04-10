@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  
+    'django_filters',
     'core',
-    'corsheaders',  
+    'corsheaders', 
+    'openpyxl',
 ]
 
 MIDDLEWARE = [
@@ -133,6 +135,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'core.User'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
