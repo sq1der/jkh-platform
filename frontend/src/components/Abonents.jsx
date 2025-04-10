@@ -1,40 +1,60 @@
-import { Scroll, Users } from "lucide-react";
-
-
-
-const users = [
-  { name: "Jesse Thomas", color: "text-yellow-500" },
-  { name: "Thisal Mathiyazhagan", color: "text-red-600" },
-  { name: "Helen Chuang", color: "text-red-600" },
-  { name: "Lura Silverman", color: "text-yellow-500" },
-  { name: "Winfred Groton" },
-  { name: "Ken Alba" },
-  { name: "Alice LeBeau" },
-  { name: "Adrian Lu" },
-  { name: "Evelyn Hamilton" },
-  { name: "Rosa Fiddlebrook" }
-];
+import { useState, useEffect } from 'react';
 
 export default function AbonentyPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [period, setPeriod] = useState("all");
+  const [debtStatus, setDebtStatus] = useState("all");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Получаем данные пользователей с бэкенда
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/users"); // Путь к API для получения пользователей
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error("Ошибка при загрузке пользователей", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
   return (
     <div className="flex min-h-screen bg-muted">
+      {/* Sidebar */}
       <aside className="w-64 bg-white p-4 shadow-md">
         <h1 className="text-3xl font-bold mb-6">ЖКХ</h1>
         <nav className="space-y-2">
           <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <users className="h-5 w-5" />
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
             <span className="font-medium">Обзор</span>
           </div>
           <div className="flex items-center space-x-2 font-bold">
-            <users className="h-5 w-5 text-blue-500" />
+            <svg className="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
             <span>Абоненты</span>
           </div>
           <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <users className="h-5 w-5" />
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
             <span className="font-medium">Отчёты</span>
           </div>
           <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <users className="h-5 w-5" />
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
             <span className="font-medium">Настройки</span>
           </div>
         </nav>
@@ -50,57 +70,59 @@ export default function AbonentyPage() {
         <h2 className="text-2xl font-semibold mb-6">Абоненты</h2>
 
         <div className="flex items-center gap-4 mb-6">
-          <input placeholder="Поиск..." className="max-w-sm" />
-          <button>Найти</button>
+          <input
+            type="text"
+            placeholder="Поиск..."
+            className="max-w-sm p-2 border rounded"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="px-4 py-2 bg-blue-500 text-white rounded">Найти</button>
         </div>
 
         <div className="flex items-center gap-4 mb-4">
-          <select>
-            <select className="w-[200px]">
-              <select placeholder="Период: За все время" />
-            </select>
-            <select>
-              <select value="all">За все время</select>
-              <select value="month">Последний месяц</select>
-            </select>
+          <select value={period} onChange={(e) => setPeriod(e.target.value)} className="w-[200px] p-2 border rounded">
+            <option value="all">За все время</option>
+            <option value="month">Последний месяц</option>
           </select>
 
-          <select>
-            <select className="w-[200px]">
-              <select placeholder="Срок задолженности: Все" />
-            </select>
-            <select>
-              <select value="all">Все</select>
-              <select value="overdue">С просрочкой</select>
-            </select>
+          <select value={debtStatus} onChange={(e) => setDebtStatus(e.target.value)} className="w-[200px] p-2 border rounded">
+            <option value="all">Все</option>
+            <option value="overdue">С просрочкой</option>
           </select>
 
-          <button>Загрузить файл</button>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded">Загрузить файл</button>
         </div>
-        <Scroll className="border rounded-lg">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-gray-100">
-              <tr className="text-muted-foreground">
-                <th className="p-3">Имя</th>
-                <th className="p-3">Адрес</th>
-                <th className="p-3">Дата последнего платежа</th>
-                <th className="p-3">Сумма</th>
-                <th className="p-3">ИИН</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, index) => (
-                <tr key={index} className="border-t hover:bg-gray-50">
-                  <td className={("p-3 font-medium", user.color)}>{user.name}</td>
-                  <td className="p-3">ул. Иванова 25 квартира 44</td>
-                  <td className="p-3">{index % 2 === 0 ? "31 марта 2025" : "25 февраля 2025 года"}</td>
-                  <td className="p-3">20.000</td>
-                  <td className="p-3">210022345654</td>
+
+        {/* Загрузка данных */}
+        {loading ? (
+          <div>Загрузка...</div>
+        ) : (
+          <div className="border rounded-lg overflow-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-100">
+                <tr className="text-muted-foreground">
+                  <th className="p-3">Имя</th>
+                  <th className="p-3">Адрес</th>
+                  <th className="p-3">Дата последнего платежа</th>
+                  <th className="p-3">Сумма</th>
+                  <th className="p-3">ИИН</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </Scroll>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user, index) => (
+                  <tr key={index} className="border-t hover:bg-gray-50">
+                    <td className="p-3 font-medium">{user.name}</td>
+                    <td className="p-3">ул. Иванова 25 квартира 44</td>
+                    <td className="p-3">{index % 2 === 0 ? "31 марта 2025" : "25 февраля 2025 года"}</td>
+                    <td className="p-3">20.000</td>
+                    <td className="p-3">210022345654</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </main>
     </div>
   );
