@@ -12,13 +12,20 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from .utils import process_excel_upload
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 class DebtorViewSet(viewsets.ModelViewSet):
     queryset = Debtor.objects.all()
     serializer_class = DebtorSerializer
-    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['full_name', 'iin']
     ordering_fields = ['full_name', 'last_payment', 'current_debt']
@@ -48,7 +55,6 @@ class DebtorViewSet(viewsets.ModelViewSet):
 class BuildingViewSet(viewsets.ModelViewSet):
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
@@ -83,7 +89,13 @@ class LoginWithEmailView(APIView):
         serializer = LoginWithEmailSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            return Response({'message': 'Успешный вход по email', 'role': user.role})
+            tokens = get_tokens_for_user(user)
+            return Response({
+                'message': 'Успешный вход по email',
+                'role': user.role,
+                'access': tokens['access'],
+                'refresh': tokens['refresh'],
+            })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class LoginWithIINView(APIView):
@@ -93,7 +105,13 @@ class LoginWithIINView(APIView):
         serializer = LoginWithIINSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            return Response({'message': 'Успешный вход по ИИН', 'role': user.role})
+            tokens = get_tokens_for_user(user)
+            return Response({
+                'message': 'Успешный вход по ИИН',
+                'role': user.role,
+                'access': tokens['access'],
+                'refresh': tokens['refresh'],
+            })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ExcelUploadView(APIView):

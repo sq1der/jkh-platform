@@ -23,7 +23,10 @@ const LoginForm = () => {
 
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem('accessToken', data.access);
+        localStorage.setItem('refreshToken', data.refresh);
         console.log('Успешный вход:', data);
+        navigate('/abonents');
         // Перенаправление или дальнейшая обработка
       } else {
         const errorData = await response.json();
