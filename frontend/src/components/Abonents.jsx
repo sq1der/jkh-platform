@@ -61,7 +61,7 @@ export default function AbonentyPage() {
       if (period && period !== 'all') {
         const fromDate = new Date();
         if (period === 'month') {
-          fromDate.setMonth(fromDate.getMonth() - 1); // последний месяц
+          fromDate.setMonth(fromDate.getMonth() - 1); 
         }
         queryParams.push(`from_date=${fromDate.toISOString().split('T')[0]}`);
       }
