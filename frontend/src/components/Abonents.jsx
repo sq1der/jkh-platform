@@ -17,8 +17,15 @@ export default function AbonentyPage() {
     const fetchAdminData = async () => {
       try {
         const token = localStorage.getItem('accessToken');
+        if (!token) {
+          console.warn('Токен не найден');
+          return;
+        }
+  
         const decoded = jwtDecode(token);
-        const response = await fetch(`http://localhost:8000/api/admins/${decoded.user_id}`, {
+        console.log('Декодированный токен:', decoded); // 🔍 Проверяем, что токен корректно декодируется
+  
+        const response = await fetch(`http://localhost:8000/api/users/${decoded.user_id}/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -26,9 +33,11 @@ export default function AbonentyPage() {
   
         if (response.ok) {
           const data = await response.json();
-          setAdminName(data.full_name); // Или data.name — в зависимости от твоего API
+          console.log('Данные администратора:', data); // 🔍 Смотрим, что вернул API
+  
+          setAdminName(data.full_name); // ⚠️ Убедись, что ключ совпадает с ответом API
         } else {
-          console.error('Ошибка получения данных админа: ', response.statusText);
+          console.error('Ошибка получения данных админа: ', response.status, response.statusText);
         }
       } catch (err) {
         console.error('Ошибка при получении данных админа', err);
@@ -124,7 +133,9 @@ export default function AbonentyPage() {
         </nav>
 
         {/* Информация о пользователе */}
+        {/* Информация о пользователе */}
         <div className="absolute bottom-4 left-4 text-sm">
+          {console.log("adminName в JSX:", adminName)} {/* Лог прямо в рендере */}
           <div className="font-medium">{adminName}</div>
           <div className="text-muted-foreground text-xs">Администратор</div>
         </div>

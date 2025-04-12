@@ -28,7 +28,7 @@ class ExcelUploadSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'role']
+        fields = ['id', 'username', 'email', 'role', 'full_name']
 
 class LoginWithEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
