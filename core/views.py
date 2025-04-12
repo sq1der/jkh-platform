@@ -27,7 +27,7 @@ class DebtorViewSet(viewsets.ModelViewSet):
     queryset = Debtor.objects.all()
     serializer_class = DebtorSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['full_name', 'iin']
+    search_fields = ['full_name', 'iin', 'address']
     ordering_fields = ['full_name', 'last_payment', 'current_debt']
     ordering = ['full_name']
 

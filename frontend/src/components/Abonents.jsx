@@ -96,9 +96,6 @@ export default function AbonentyPage() {
     fetchUsers();
   }, [searchTerm, period, debtStatus]); // Запрос будет выполняться при изменении этих параметров
 
-  const filteredUsers = debtors.filter((debtor) =>
-    debtor.iin.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="flex min-h-screen bg-muted">
@@ -186,7 +183,7 @@ export default function AbonentyPage() {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((debtor, index) => (
+                {debtors.map((debtor, index) => (
                   <tr key={index} className="border-t hover:bg-gray-50">
                     <td className="p-3 font-medium">{debtor.full_name}</td>
                     <td className="p-3">{debtor.address}</td>
