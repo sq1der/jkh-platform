@@ -97,7 +97,7 @@ export default function AbonentyPage() {
   }, [searchTerm, period, debtStatus]); // Запрос будет выполняться при изменении этих параметров
 
   const filteredUsers = debtors.filter((debtor) =>
-    debtor.full_name.toLowerCase().includes(searchTerm.toLowerCase())
+    debtor.iin.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
