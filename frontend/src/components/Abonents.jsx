@@ -14,11 +14,30 @@ export default function AbonentyPage() {
   const [adminName, setAdminName] = useState('');
 
   useEffect(() => {
-    if (accessToken) {
-      const decodedToken = jwtecode(accessToken);
-      setAdminName(decodedToken.name); // Предположим, что в токене есть поле "name"
-    }
-  }, [accessToken]);
+    const fetchAdminData = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const decoded = jwtDecode(token);
+        const response = await fetch(`http://localhost:8000/api/admins/${decoded.user_id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setAdminName(data.full_name); // Или data.name — в зависимости от твоего API
+        } else {
+          console.error('Ошибка получения данных админа: ', response.statusText);
+        }
+      } catch (err) {
+        console.error('Ошибка при получении данных админа', err);
+      }
+    };
+  
+    fetchAdminData();
+  }, []);
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
