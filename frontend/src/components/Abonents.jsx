@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { jwtDecode } from 'jwt-decode';
-
-const accessToken = localStorage.getItem('accessToken');
 
 export default function AbonentyPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,67 +7,61 @@ export default function AbonentyPage() {
   const [debtStatus, setDebtStatus] = useState("all");
   const [debtors, setDebtors] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  // Декодируем токен, чтобы получить информацию о пользователе
   const [adminName, setAdminName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const fileInputRef = useRef(null);
 
+  const accessToken = localStorage.getItem('accessToken');
+
+  // Получение данных администратора
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
         const token = localStorage.getItem('accessToken');
-        if (!token) {
-          console.warn('Токен не найден');
-          return;
-        }
-  
+        if (!token) return;
+
         const decoded = jwtDecode(token);
-        console.log('Декодированный токен:', decoded); // 🔍 Проверяем, что токен корректно декодируется
-  
         const response = await fetch(`http://localhost:8000/api/users/${decoded.user_id}/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
         });
-  
+
         if (response.ok) {
           const data = await response.json();
-          console.log('Данные администратора:', data); // 🔍 Смотрим, что вернул API
-  
-          setAdminName(data.full_name); // ⚠️ Убедись, что ключ совпадает с ответом API
+          setAdminName(data.full_name);
         } else {
-          console.error('Ошибка получения данных админа: ', response.status, response.statusText);
+          console.error('Ошибка получения данных администратора');
         }
       } catch (err) {
-        console.error('Ошибка при получении данных админа', err);
+        console.error('Ошибка при получении данных администратора', err);
       }
     };
-  
+
     fetchAdminData();
   }, []);
-  
 
+  // Загрузка списка должников
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
 
-      // Составляем параметры запроса
       let queryParams = [];
 
       if (searchTerm) {
         queryParams.push(`search=${searchTerm}`);
       }
-      if (period && period !== 'all') {
+
+      if (period !== 'all') {
         const fromDate = new Date();
-        if (period === 'month') {
-          fromDate.setMonth(fromDate.getMonth() - 1); 
-        }
+        if (period === 'month') fromDate.setMonth(fromDate.getMonth() - 1);
         queryParams.push(`from_date=${fromDate.toISOString().split('T')[0]}`);
       }
-      if (debtStatus && debtStatus !== 'all') {
+
+      if (debtStatus !== 'all') {
         queryParams.push(`status=${debtStatus}`);
       }
 
-      // Формируем URL с параметрами
       const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
 
       try {
@@ -82,7 +74,7 @@ export default function AbonentyPage() {
 
         if (response.ok) {
           const data = await response.json();
-          setDebtors(data); // Сохраняем данные должников
+          setDebtors(data);
         } else {
           console.error('Ошибка загрузки данных');
         }
@@ -94,45 +86,56 @@ export default function AbonentyPage() {
     };
 
     fetchUsers();
-  }, [searchTerm, period, debtStatus]); // Запрос будет выполняться при изменении этих параметров
+  }, [searchTerm, period, debtStatus]);
 
+  // Обработка загрузки файла
+  const handleFileUpload = async () => {
+    const file = fileInputRef.current?.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://localhost:8000/api/debtors/upload/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert('Файл успешно загружен');
+        setIsModalOpen(false);
+      } else {
+        alert('Ошибка при загрузке файла');
+      }
+    } catch (err) {
+      console.error('Ошибка при загрузке файла:', err);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-muted">
       {/* Sidebar */}
-      <aside className="w-64 bg-white p-4 shadow-md">
+      <aside className="w-64 bg-white p-4 shadow-md relative">
         <h1 className="text-3xl font-bold mb-6">ЖКХ</h1>
         <nav className="space-y-2">
           <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
-            </svg>
             <span className="font-medium">Обзор</span>
           </div>
-          <div className="flex items-center space-x-2 font-bold">
-            <svg className="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
-            </svg>
+          <div className="flex items-center space-x-2 font-bold text-blue-500">
             <span>Абоненты</span>
           </div>
           <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
-            </svg>
             <span className="font-medium">Отчёты</span>
           </div>
           <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 12h2m0 0h2m-2 0V9m0 3v3m1 4v2a2 2 0 01-2 2h-4a2 2 0 01-2-2v-2m4-6a4 4 0 11-8 0 4 4 0 018 0z"></path>
-            </svg>
             <span className="font-medium">Настройки</span>
           </div>
         </nav>
-
-        {/* Информация о пользователе */}
-        {/* Информация о пользователе */}
         <div className="absolute bottom-4 left-4 text-sm">
-          {console.log("adminName в JSX:", adminName)} {/* Лог прямо в рендере */}
           <div className="font-medium">{adminName}</div>
           <div className="text-muted-foreground text-xs">Администратор</div>
         </div>
@@ -164,10 +167,14 @@ export default function AbonentyPage() {
             <option value="overdue">С просрочкой</option>
           </select>
 
-          <button className="px-4 py-2 bg-blue-500 text-white rounded">Загрузить файл</button>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Загрузить файл
+          </button>
         </div>
 
-        {/* Загрузка данных */}
         {loading ? (
           <div>Загрузка...</div>
         ) : (
@@ -187,7 +194,7 @@ export default function AbonentyPage() {
                   <tr key={index} className="border-t hover:bg-gray-50">
                     <td className="p-3 font-medium">{debtor.full_name}</td>
                     <td className="p-3">{debtor.address}</td>
-                    <td className="p-3">{debtor.last_payment ? debtor.last_payment : 'Не указано'}</td>
+                    <td className="p-3">{debtor.last_payment || 'Не указано'}</td>
                     <td className="p-3">{debtor.current_debt}</td>
                     <td className="p-3">{debtor.iin}</td>
                   </tr>
@@ -197,6 +204,37 @@ export default function AbonentyPage() {
           </div>
         )}
       </main>
+
+      {/* Модальное окно */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-xl shadow-lg">
+            <h2 className="text-2xl font-bold mb-4 text-center">Загрузить файл</h2>
+            <p className="text-center text-gray-600 mb-4">Поддерживаются форматы: .xls, .xlsx, .csv, .json</p>
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="mb-4 w-full border p-2 rounded"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleFileUpload}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Загрузить
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

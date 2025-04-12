@@ -15,5 +15,8 @@
     "url": "https://github.com/sq1der/jkh-platform/issues"
   },
   "homepage": "https://github.com/sq1der/jkh-platform#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "recharts": "^2.15.2"
+  }
 }

@@ -13,6 +13,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from .utils import process_excel_upload
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 User = get_user_model()
 
@@ -55,6 +56,7 @@ class DebtorViewSet(viewsets.ModelViewSet):
 class BuildingViewSet(viewsets.ModelViewSet):
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()

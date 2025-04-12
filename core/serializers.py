@@ -13,7 +13,7 @@ class DebtorSerializer(serializers.ModelSerializer):
 class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Building
-        fields = '__all__'
+        fields = ['id', 'name', 'address', 'location', 'total_residents', 'total_debtors', 'total_debt']
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
