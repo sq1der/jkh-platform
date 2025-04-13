@@ -34,10 +34,17 @@ const Home = () => {
 
       {/* Фотографии города */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-12">
-        <img src="/city1.jpg" alt="Город 1" className="rounded-xl w-full h-64 object-cover" />
-        <img src="/city2.jpg" alt="Город 2" className="rounded-xl w-full h-64 object-cover" />
-        <img src="/city3.jpg" alt="Город 3" className="rounded-xl w-full h-64 object-cover" />
+        <div className="bg-white rounded-xl shadow p-2">
+            <img src="/city1.jpg" alt="Город 1" className="rounded-xl w-full h-64 object-cover" />
+        </div>
+        <div className="bg-white rounded-xl shadow p-2">
+            <img src="/city2.jpg" alt="Город 2" className="rounded-xl w-full h-64 object-cover" />
+        </div>
+        <div className="bg-white rounded-xl shadow p-2">
+            <img src="/city3.jpg" alt="Город 3" className="rounded-xl w-full h-64 object-cover" />
+        </div>
       </section>
+
 
       {/* Кнопки */}
       <section className="flex flex-col md:flex-row justify-center gap-4 px-6 pb-12">
@@ -47,17 +54,20 @@ const Home = () => {
       </section>
 
       {/* Проверка задолженности */}
-      <section className="bg-sky-500 py-10 px-6 text-white text-center">
-        <h2 className="text-2xl font-semibold mb-6">Посмотреть задолженность</h2>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-4">
-          <input
-            type="text"
-            placeholder="Введите ваш ИИН"
-            className="w-full md:w-[400px] px-5 py-3 rounded text-black"
-          />
-          <button className="bg-black px-8 py-3 rounded font-semibold">Проверить</button>
+      <section className="bg-sky-500 py-10 px-6 text-white flex justify-center">
+        <div className="bg-sky-500 rounded-2xl shadow-lg px-6 py-8 w-full max-w-xl text-center">
+            <h2 className="text-2xl font-semibold mb-6">Посмотреть задолженность</h2>
+            <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+            <input
+                type="text"
+                placeholder="Введите ваш ИИН"
+                className="w-full md:w-[300px] px-5 py-3 rounded text-black"
+            />
+            <button className="bg-black px-8 py-3 rounded font-semibold">Проверить</button>
+            </div>
         </div>
       </section>
+
 
       {/* Карта */}
       <section className="bg-white px-6 py-12">
