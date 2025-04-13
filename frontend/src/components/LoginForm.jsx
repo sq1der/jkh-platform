@@ -26,7 +26,7 @@ const LoginForm = () => {
         localStorage.setItem('accessToken', data.access);
         localStorage.setItem('refreshToken', data.refresh);
         console.log('Успешный вход:', data);
-        navigate('/abonents');
+        navigate('/overview-page');
         // Перенаправление или дальнейшая обработка
       } else {
         const errorData = await response.json();

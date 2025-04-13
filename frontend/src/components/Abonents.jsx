@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function AbonentyPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -122,18 +123,10 @@ export default function AbonentyPage() {
       <aside className="w-64 bg-white p-4 shadow-md relative">
         <h1 className="text-3xl font-bold mb-6">ЖКХ</h1>
         <nav className="space-y-2">
-          <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <span className="font-medium">Обзор</span>
-          </div>
-          <div className="flex items-center space-x-2 font-bold text-blue-500">
-            <span>Абоненты</span>
-          </div>
-          <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <span className="font-medium">Отчёты</span>
-          </div>
-          <div className="flex items-center space-x-2 text-muted-foreground hover:text-black">
-            <span className="font-medium">Настройки</span>
-          </div>
+          <div className="text-muted-foreground hover:text-black" ><Link to='/overview-page'>Обзор</Link></div>
+          <div className="font-bold text-blue-500"><Link >Абоненты</Link></div>
+          <div className="text-muted-foreground hover:text-black"><Link>Отчеты</Link></div>
+          <div className="text-muted-foreground hover:text-black"><Link>Настройки</Link></div>
         </nav>
         <div className="absolute bottom-4 left-4 text-sm">
           <div className="font-medium">{adminName}</div>

@@ -10,7 +10,7 @@ const containerStyle = {
 
 const center = {
   lat: 0.0,
-  lng: 0.0, // Нур-Султан/Астана, по умолчанию
+  lng: 0.0,
 }
 
 const PublicMap = () => {

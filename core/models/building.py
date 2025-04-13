@@ -4,7 +4,7 @@ from django.contrib.gis.db import models as gis_models
 from django.contrib.gis.geos import Point
 
 def default_location():
-    return Point(0.0, 0.0)
+    return Point(52.286838334056604, 76.94313747316139)
 
 
 class Building(models.Model):
