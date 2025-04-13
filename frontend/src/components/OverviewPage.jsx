@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+/*import { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
@@ -92,7 +92,8 @@ export default function Overview() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Сайдбар */}
+      
+    //{/* Сайдбар *//*
       <aside className="w-64 bg-white p-4 shadow-md relative">
         <h1 className="text-3xl font-bold mb-6">ЖКХ</h1>
         <nav className="space-y-2">
@@ -109,7 +110,7 @@ export default function Overview() {
 
       <main className="flex-1 p-6">
       <h2 className="text-2xl font-semibold mb-6">Обзор</h2>
-        {/* Фильтры */}
+        {/* Фильтры *//*
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div className="flex gap-4">
           <select value={period} onChange={e => setPeriod(e.target.value)} className="p-2 border rounded-2xl">
@@ -125,11 +126,11 @@ export default function Overview() {
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          {/* Левая колонка */}
+          {/* Левая колонка *//*
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Статистика</h2>
 
-            {/* Карточки */}
+            {/* Карточки *//*
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl shadow p-4 transition-opacity duration-500">
                 <div className="text-gray-500">Абоненты</div>
@@ -145,14 +146,14 @@ export default function Overview() {
               </div>
             </div>
 
-            {/* Диаграмма */}
+            {/* Диаграмма *//*
             <div className="bg-white p-4 rounded-2xl shadow">
               <h3 className="font-semibold mb-2">Распределение по районам</h3>
               <Pie data={pieChartData} />
             </div>
           </div>
 
-          {/* Правая колонка — Карта */}
+          {/* Правая колонка — Карта *//*
           <div className="space-y-6">
           <h2 className="text-2xl font-semibold">Карта</h2>
 
@@ -193,7 +194,7 @@ export default function Overview() {
         </div>
       </main>
 
-      {/* Модальное окно */}
+      {/* Модальное окно *//*
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-xl shadow-lg">
@@ -219,4 +220,4 @@ export default function Overview() {
       )}
     </div>
   );
-}
+}*/
