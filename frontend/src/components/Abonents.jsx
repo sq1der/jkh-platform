@@ -136,13 +136,14 @@ export default function AbonentyPage() {
 
       {/* Main Content */}
       <main className="flex-1 p-8">
+      <div className="flex items-center gap-4 mb-6">
+      <div className="flex gap-4">
         <h2 className="text-2xl font-semibold mb-6">Абоненты</h2>
-
-        <div className="flex items-center gap-4 mb-6">
+      </div>
           <input
             type="text"
             placeholder="Поиск..."
-            className="max-w-sm p-2 border rounded"
+            className="ml-8 w-[400px] h-[49px] max-w-sm p-2 border rounded-2xl"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

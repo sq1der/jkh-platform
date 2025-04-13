@@ -1,10 +1,12 @@
-/*import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
 
 const center = { lat: 52.2871, lng: 76.9674 };
 
@@ -92,17 +94,25 @@ export default function Overview() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      
-    //{/* Сайдбар *//*
-      <aside className="w-64 bg-white p-4 shadow-md relative">
-        <h1 className="text-3xl font-bold mb-6">ЖКХ</h1>
-        <nav className="space-y-2">
-          <div className="font-bold text-blue-500" ><Link>Обзор</Link></div>
-          <div className="text-muted-foreground hover:text-black"><Link to="/abonents" >Абоненты</Link></div>
-          <div className="text-muted-foreground hover:text-black"><Link>Отчеты</Link></div>
-          <div className="text-muted-foreground hover:text-black"><Link>Настройки</Link></div>
-        </nav>
-        <div className="absolute bottom-4 left-4 text-sm">
+      {/* Сайдбар */}
+      <aside className="w-64 bg-white shadow-lg flex flex-col justify-between">
+        <div>
+          <div className="text-3xl font-bold p-6 border-b border-gray-200">
+            ЖКХ
+          </div>
+          <nav className="flex flex-col gap-1 mt-4 px-4">
+            <Link to="/overview-page"><SidebarItem icon={<FaChartBar />} text="Обзор" active={true} /></Link>
+            <Link to="/abonents"><SidebarItem icon={<FaUsers />} text="Абоненты" active={false} /></Link>
+            <Link to="/report"><SidebarItem icon={<FaFileExcel />} text="Отчеты" active={false} /></Link>
+            <Link><SidebarItem icon={<FaCog />} text="Настройки" active={false} /></Link>
+          </nav>
+        </div>
+        <div className="flex items-center gap-3 p-4 border-t border-gray-200">
+          <img
+            src={'https://ui-avatars.com/api/?name=${adminName}'}
+            alt="avatar"
+            className="w-10 h-10 rounded-full"
+          />
           <div className="font-medium">{adminName}</div>
           <div className="text-muted-foreground text-xs">Администратор</div>
         </div>
@@ -110,27 +120,27 @@ export default function Overview() {
 
       <main className="flex-1 p-6">
       <h2 className="text-2xl font-semibold mb-6">Обзор</h2>
-        {/* Фильтры *//*
+        {/* Фильтры */}
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div className="flex gap-4">
-          <select value={period} onChange={e => setPeriod(e.target.value)} className="p-2 border rounded-2xl">
+          <select value={period} onChange={e => setPeriod(e.target.value)} className="w-[400px] p-2 border rounded-2xl">
             <option value="all">Период: Все время</option>
             <option value="month">Последний месяц</option>
           </select>
-          <select value={peopleFilter} onChange={e => setPeopleFilter(e.target.value)} className="p-2 border rounded">
+          <select value={peopleFilter} onChange={e => setPeopleFilter(e.target.value)} className="w-[400px] h-[49px] p-2 border rounded-2xl">
             <option value="all">Люди: Все</option>
           </select>
         </div>
-          <button onClick={() => setIsModalOpen(true)} className="bg-black text-white px-4 py-2 rounded">Загрузить файл</button>
+          <button onClick={() => setIsModalOpen(true)} className="w-[250px] h-[49px] bg-black text-white px-4 py-2 rounded-2xl">Загрузить файл</button>
           <input type="file" ref={fileInputRef} className="hidden" />
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          {/* Левая колонка *//*
+          {/* Левая колонка */}
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Статистика</h2>
 
-            {/* Карточки *//*
+            {/* Карточки */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl shadow p-4 transition-opacity duration-500">
                 <div className="text-gray-500">Абоненты</div>
@@ -146,14 +156,14 @@ export default function Overview() {
               </div>
             </div>
 
-            {/* Диаграмма *//*
+            {/* Диаграмма */}
             <div className="bg-white p-4 rounded-2xl shadow">
               <h3 className="font-semibold mb-2">Распределение по районам</h3>
               <Pie data={pieChartData} />
             </div>
           </div>
 
-          {/* Правая колонка — Карта *//*
+          {/* Правая колонка — Карта */}
           <div className="space-y-6">
           <h2 className="text-2xl font-semibold">Карта</h2>
 
@@ -194,7 +204,7 @@ export default function Overview() {
         </div>
       </main>
 
-      {/* Модальное окно *//*
+      {/* Модальное окно */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-xl shadow-lg">
@@ -220,4 +230,17 @@ export default function Overview() {
       )}
     </div>
   );
-}*/
+}
+
+export function SidebarItem({ icon, text, active }) {
+  return (
+    <div
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer ${
+        active ? "bg-blue-100 text-blue-700 font-semibold" : "hover:bg-gray-100"
+      }`}
+    >
+      <div className="text-lg">{icon}</div>
+      <span>{text}</span>
+    </div>
+  );
+}
