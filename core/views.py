@@ -31,6 +31,7 @@ class DebtorViewSet(viewsets.ModelViewSet):
     search_fields = ['full_name', 'iin', 'address']
     ordering_fields = ['full_name', 'last_payment', 'current_debt']
     ordering = ['full_name']
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -71,6 +72,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 class DebtSearchView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request, iin):
         try:
             debt = Debtor.objects.get(iin=iin)

@@ -10,7 +10,7 @@ const DebtInfoPage = () => {
     if (!iin) return;
 
     try {
-      const response = await axios.get(`/api/debt/${iin}/`);
+      const response = await axios.get(`http://localhost:8000/api/debt/${iin}/`);
       setData(response.data);
       setError('');
     } catch (err) {
@@ -58,7 +58,7 @@ const DebtInfoPage = () => {
                 {data.address}
               </h2>
               <p className="mb-1">
-                Сумма задолженности: <span className="font-semibold">{data.amount} тенге</span>
+                Сумма задолженности: <span className="font-semibold">{data.current_debt} тенге</span>
               </p>
               <p>
                 Остаток срока: <span className="font-semibold">{data.years_left} {data.years_left === 1 ? 'год' : 'года'}</span>

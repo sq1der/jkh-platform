@@ -112,15 +112,15 @@ export default function Overview() {
         {/* Фильтры */}
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div className="flex gap-4">
-          <select value={period} onChange={e => setPeriod(e.target.value)} className="p-2 border rounded-2xl">
+          <select value={period} onChange={e => setPeriod(e.target.value)} className="w-[400px] p-2 border rounded-2xl">
             <option value="all">Период: Все время</option>
             <option value="month">Последний месяц</option>
           </select>
-          <select value={peopleFilter} onChange={e => setPeopleFilter(e.target.value)} className="p-2 border rounded">
+          <select value={peopleFilter} onChange={e => setPeopleFilter(e.target.value)} className="w-[400px] h-[49px] p-2 border rounded-2xl">
             <option value="all">Люди: Все</option>
           </select>
         </div>
-          <button onClick={() => setIsModalOpen(true)} className="bg-black text-white px-4 py-2 rounded">Загрузить файл</button>
+          <button onClick={() => setIsModalOpen(true)} className="w-[250px] h-[49px] bg-black text-white px-4 py-2 rounded-2xl">Загрузить файл</button>
           <input type="file" ref={fileInputRef} className="hidden" />
         </div>
 
