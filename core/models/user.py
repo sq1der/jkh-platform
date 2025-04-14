@@ -23,6 +23,8 @@ class User(AbstractUser, PermissionsMixin):
         OPERATOR = 'operator', 'Оператор'
         VIEWER = 'viewer', 'Просмотр'
 
+    username = None 
+
     email = models.EmailField(unique=True)
     iin = models.CharField(max_length=12, unique=True)  
     full_name = models.CharField(max_length=255)

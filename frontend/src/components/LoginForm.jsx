@@ -27,7 +27,6 @@ const LoginForm = () => {
         localStorage.setItem('refreshToken', data.refresh);
         console.log('Успешный вход:', data);
         navigate('/overview-page');
-        // Перенаправление или дальнейшая обработка
       } else {
         const errorData = await response.json();
         if (errorData.non_field_errors) {

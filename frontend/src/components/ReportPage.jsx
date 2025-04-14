@@ -1,4 +1,3 @@
-// src/pages/ReportsPage.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { FaFileExcel, FaUser, FaChartBar, FaUsers, FaCog } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';

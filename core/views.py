@@ -1,20 +1,26 @@
-from django.shortcuts import render
-
 # Create your views here.
-
-from rest_framework import viewsets, permissions, filters
-from .models import Debtor, Building, Payment, ExcelUpload
-from .serializers import DebtorSerializer, BuildingSerializer, PaymentSerializer, ExcelUploadSerializer, LoginWithEmailSerializer, LoginWithIINSerializer
-from django.contrib.auth import get_user_model
-from .serializers import UserSerializer
+from rest_framework import viewsets, permissions, filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from django.utils import timezone
+from datetime import timedelta
+
+from django.contrib.auth import get_user_model
+
+from .models import Debtor, Building, Payment, ExcelUpload
+from .serializers import (
+    DebtorSerializer,
+    BuildingSerializer,
+    PaymentSerializer,
+    ExcelUploadSerializer,
+    LoginWithEmailSerializer,
+    LoginWithIINSerializer,
+    UserSerializer
+)
 
 from .excel_parser import parse_excel_file
 
@@ -31,29 +37,29 @@ def get_tokens_for_user(user):
 class DebtorViewSet(viewsets.ModelViewSet):
     queryset = Debtor.objects.all()
     serializer_class = DebtorSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['full_name', 'iin', 'address']
     ordering_fields = ['full_name', 'last_payment', 'current_debt']
     ordering = ['full_name']
-    permission_classes = [AllowAny]
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        request = self.request
+        params = self.request.query_params
 
-        from_date = request.query_params.get('from_date')
-        to_date = request.query_params.get('to_date')
+        from_date = params.get('from_date')
+        to_date = params.get('to_date')
         if from_date and to_date:
             queryset = queryset.filter(last_payment__range=[from_date, to_date])
 
-        overdue_days = request.query_params.get('overdue_days')
+        overdue_days = params.get('overdue_days')
         if overdue_days:
-            cutoff_date = timezone.now().date() - timedelta(days=int(overdue_days))
-            queryset = queryset.filter(last_payment__lt=cutoff_date)
+            cutoff = timezone.now().date() - timedelta(days=int(overdue_days))
+            queryset = queryset.filter(last_payment__lt=cutoff)
 
-        status = request.query_params.get('status')
-        if status:
-            queryset = queryset.filter(status=status)
+        status_param = params.get('status')
+        if status_param:
+            queryset = queryset.filter(status=status_param)
 
         return queryset
 
@@ -66,29 +72,33 @@ class BuildingViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
 class ExcelUploadViewSet(viewsets.ModelViewSet):
     queryset = ExcelUpload.objects.all()
     serializer_class = ExcelUploadSerializer
+    permission_classes = [IsAuthenticated]
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
 class DebtSearchView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, iin):
-        try:
-            debt = Debtor.objects.get(iin=iin)
+        debtor = Debtor.objects.filter(iin=iin).first()
+        if debtor:
             return Response({
                 "debt": {
-                    "address": debt.address,
-                    "current_debt": debt.current_debt,
-                    "lastPaymentDate": debt.last_payment
+                    "address": debtor.address,
+                    "current_debt": debtor.current_debt,
+                    "lastPaymentDate": debtor.last_payment
                 }
             })
-        except Debtor.DoesNotExist:
-            return Response({"debt": None}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"debt": None}, status=status.HTTP_404_NOT_FOUND)
+
 
 class LoginWithEmailView(APIView):
     permission_classes = [AllowAny]
@@ -132,14 +142,12 @@ class ExcelUploadView(APIView):
         if not excel_file:
             return Response({'error': 'Файл не найден'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Создаём объект ExcelUpload
         upload = ExcelUpload.objects.create(
             file=excel_file,
             user=request.user,
             file_name=excel_file.name
         )
 
-        # Парсим файл
         result = parse_excel_file(upload.file.path, upload)
 
         if result.get('success'):

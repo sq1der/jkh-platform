@@ -24,7 +24,6 @@ def parse_excel_file(file_path, upload: ExcelUpload):
     try:
         df = pd.read_excel(file_path)
 
-        # Проверка обязательных колонок
         for col in REQUIRED_COLUMNS:
             if col not in df.columns:
                 upload.status = 'error'
@@ -32,10 +31,8 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                 upload.save()
                 return {'success': False, 'error': f'Отсутствует колонка: {col}'}
 
-        # Отфильтровать по SERVICE_ID == 1061 (электроэнергия)
         df = df[df['SERVICE_ID'] == 1061]
 
-        # Пропускаем все строки до первой с PAY_DATE
         df = df[df['PAY_DATE'].notnull()]
         if df.empty:
             upload.status = 'error'
@@ -51,10 +48,8 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                     address = str(row['ADDRESS']).strip()
                     pay_date = pd.to_datetime(row['PAY_DATE']).date()
 
-                    # Нормализуем адрес для поиска
                     normalized_address = normalize_address(address)
 
-                    # Поиск Building по адресу
                     all_buildings = list(Building.objects.all())
                     building = next(
                         (b for b in all_buildings if normalize_address(b.address) == normalized_address),
@@ -64,7 +59,6 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                     if not building:
                         raise ValueError(f"Здание не найдено по адресу: {address}")
 
-                    # Определение ИИН по первым 12 цифрам аккаунта (если применимо)
                     iin = account[:12] if len(account) >= 12 else None
 
                     debtor, created = Debtor.objects.get_or_create(
@@ -79,11 +73,9 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                         }
                     )
 
-                    # Обновление связи с building, если её не было
                     if not debtor.building:
                         debtor.building = building
 
-                    # Создание платежа
                     Payment.objects.create(
                         amount=pay_sum,
                         date=pay_date,
@@ -91,13 +83,14 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                         debtor=debtor
                     )
 
-                    # Обновление текущего долга (уменьшаем на сумму платежа)
                     debtor.current_debt = max(0, debtor.current_debt - pay_sum)
+                    debtor.last_payment = pay_date
+                    
                     debtor.save()
 
                 except Exception as row_error:
                     error_log.append({
-                        'row': int(index) + 2,  # Excel обычно начинается с 1, +1 за заголовок
+                        'row': int(index) + 2, 
                         'error': str(row_error)
                     })
 

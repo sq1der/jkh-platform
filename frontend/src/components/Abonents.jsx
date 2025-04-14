@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import React from 'react';
 import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
 import { SidebarItem } from './OverviewPage';
+import axios from 'axios';
 
 export default function AbonentyPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,7 +18,6 @@ export default function AbonentyPage() {
 
   const accessToken = localStorage.getItem('accessToken');
 
-  // Получение данных администратора
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
@@ -45,7 +45,6 @@ export default function AbonentyPage() {
     fetchAdminData();
   }, []);
 
-  // Загрузка списка должников
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -92,31 +91,32 @@ export default function AbonentyPage() {
     fetchUsers();
   }, [searchTerm, period, debtStatus]);
 
-  // Обработка загрузки файла
+
   const handleFileUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
     if (!file) return;
-
+  
+    const token = localStorage.getItem('accessToken');
     const formData = new FormData();
     formData.append('file', file);
-
+  
     try {
-      const response = await fetch('http://localhost:8000/api/debtors/upload/', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: formData,
-      });
-
-      if (response.ok) {
-        alert('Файл успешно загружен');
-        setIsModalOpen(false);
-      } else {
-        alert('Ошибка при загрузке файла');
-      }
+      const res = await axios.post(
+        'http://localhost:8000/upload/',
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      console.log("Успешно загружено", res.data);
+      alert("Файл успешно загружен!");
+      setIsModalOpen(false);
     } catch (err) {
-      console.error('Ошибка при загрузке файла:', err);
+      console.error("Ошибка загрузки", err.response?.data || err.message);
+      alert("Ошибка при загрузке файла");
     }
   };
 

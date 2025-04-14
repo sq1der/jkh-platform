@@ -1,8 +1,8 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model, authenticate
+
 from .models import Debtor, Building, Payment, ExcelUpload
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate
-from rest_framework.permissions import AllowAny
+
 
 User = get_user_model()
 
@@ -10,7 +10,6 @@ class DebtorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Debtor
         fields = '__all__'
-        permission_classes = [AllowAny]
 
 class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LoginWithEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         user = authenticate(email=data['email'], password=data['password'])

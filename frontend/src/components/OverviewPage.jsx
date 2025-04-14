@@ -66,16 +66,28 @@ export default function Overview() {
   const handleFileUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
     if (!file) return;
+  
+    const token = localStorage.getItem('accessToken');
     const formData = new FormData();
     formData.append('file', file);
-
+  
     try {
-      await axios.post('http://localhost:8000/api/debtors/upload/', formData, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-      alert('Файл успешно загружен');
-    } catch {
-      alert('Ошибка загрузки файла');
+      const res = await axios.post(
+        'http://localhost:8000/upload/',
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      console.log("Успешно загружено", res.data);
+      alert("Файл успешно загружен!");
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error("Ошибка загрузки", err.response?.data || err.message);
+      alert("Ошибка при загрузке файла");
     }
   };
 
