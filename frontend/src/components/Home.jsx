@@ -3,6 +3,7 @@ import PublicMap from './PublicMap';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <div className="font-sans text-white bg-[#121212]">
       {/* Хедер */}

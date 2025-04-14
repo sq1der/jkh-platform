@@ -8,6 +8,9 @@ import SidebarMenu from './components/SidebarMenu';
 import Home from './components/Home';
 import DebtCheckPage from './components/DebtCheckPage';
 import OrganizationStructure from './components/OrganizationStructure';
+import ReportsPage from './components/ReportPage';
+
+
 const App = () => {
   return (
     <Router>
@@ -21,6 +24,7 @@ const App = () => {
         <Route path="/home-page" element={<Home />} />
         <Route path="/debtcheck" element={<DebtCheckPage/>} />
         <Route path="/organization" element={<OrganizationStructure/>} />
+        <Route path="/report" element={<ReportsPage/>} />
       </Routes>
     </Router>
   );

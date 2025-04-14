@@ -109,12 +109,12 @@ export default function Overview() {
         </div>
         <div className="flex items-center gap-3 p-4 border-t border-gray-200">
           <img
-            src={'https://ui-avatars.com/api/?name=${adminName}'}
+            src={`https://ui-avatars.com/api/?name=${adminName}`} 
             alt="avatar"
             className="w-10 h-10 rounded-full"
           />
-          <div className="font-medium">{adminName}</div>
-          <div className="text-muted-foreground text-xs">Администратор</div>
+          <div className="font-semibold">{adminName}</div>
+          <div className="text-sm text-gray-500">Администратор</div>
         </div>
       </aside>
 
@@ -244,3 +244,4 @@ export function SidebarItem({ icon, text, active }) {
     </div>
   );
 }
+

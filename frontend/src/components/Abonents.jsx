@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
+import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
+import { SidebarItem } from './OverviewPage';
 
 export default function AbonentyPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -118,19 +121,28 @@ export default function AbonentyPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-muted">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-white p-4 shadow-md relative">
-        <h1 className="text-3xl font-bold mb-6">ЖКХ</h1>
-        <nav className="space-y-2">
-          <div className="text-muted-foreground hover:text-black" ><Link to='/overview-page'>Обзор</Link></div>
-          <div className="font-bold text-blue-500"><Link >Абоненты</Link></div>
-          <div className="text-muted-foreground hover:text-black"><Link>Отчеты</Link></div>
-          <div className="text-muted-foreground hover:text-black"><Link>Настройки</Link></div>
-        </nav>
-        <div className="absolute bottom-4 left-4 text-sm">
-          <div className="font-medium">{adminName}</div>
-          <div className="text-muted-foreground text-xs">Администратор</div>
+       <aside className="w-64 bg-white shadow-lg flex flex-col justify-between">
+        <div>
+          <div className="text-3xl font-bold p-6 border-b border-gray-200">
+            ЖКХ
+          </div>
+          <nav className="flex flex-col gap-1 mt-4 px-4">
+            <Link to="/overview-page"><SidebarItem icon={<FaChartBar />} text="Обзор" active={false} /></Link>
+            <Link to="/abonents"><SidebarItem icon={<FaUsers />} text="Абоненты" active={true} /></Link>
+            <Link to="/report"><SidebarItem icon={<FaFileExcel />} text="Отчеты" active={false} /></Link>
+            <Link><SidebarItem icon={<FaCog />} text="Настройки" active={false} /></Link>
+          </nav>
+        </div>
+        <div className="flex items-center gap-3 p-4 border-t border-gray-200">
+          <img
+            src={`https://ui-avatars.com/api/?name=${adminName}`} 
+            alt="avatar"
+            className="w-10 h-10 rounded-full"
+          />
+          <div className="font-semibold">{adminName}</div>
+          <div className="text-sm text-gray-500">Администратор</div>
         </div>
       </aside>
 
@@ -143,26 +155,26 @@ export default function AbonentyPage() {
           <input
             type="text"
             placeholder="Поиск..."
-            className="ml-8 w-[400px] h-[49px] max-w-sm p-2 border rounded-2xl"
+            className="ml-8 w-[400px] h-[42px] max-w-sm p-2 border rounded-2xl"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button className="px-4 py-2 bg-blue-500 text-white rounded">Найти</button>
+          <button className="w-[140px] h-[42px] px-4 py-2 bg-black text-white rounded-2xl">Найти</button>
         </div>
 
         <div className="flex items-center gap-4 mb-4">
-          <select value={period} onChange={(e) => setPeriod(e.target.value)} className="w-[200px] p-2 border rounded">
+          <select value={period} onChange={(e) => setPeriod(e.target.value)} className="w-[400px] h-[49px] p-2 border rounded-2xl">
             <option value="all">За все время</option>
             <option value="month">Последний месяц</option>
           </select>
 
-          <select value={debtStatus} onChange={(e) => setDebtStatus(e.target.value)} className="w-[200px] p-2 border rounded">
+          <select value={debtStatus} onChange={(e) => setDebtStatus(e.target.value)} className="w-[400px] h-[49px] p-2 border rounded-2xl">
             <option value="all">Все</option>
             <option value="overdue">С просрочкой</option>
           </select>
 
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="ml-20 w-[250px] h-[49px] px-4 py-2 bg-black text-white rounded-2xl"
             onClick={() => setIsModalOpen(true)}
           >
             Загрузить файл
@@ -174,7 +186,7 @@ export default function AbonentyPage() {
         ) : (
           <div className="border rounded-lg overflow-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-gray-100">
+              <thead className="bg-white">
                 <tr className="text-muted-foreground">
                   <th className="p-3">Имя</th>
                   <th className="p-3">Адрес</th>
@@ -185,7 +197,7 @@ export default function AbonentyPage() {
               </thead>
               <tbody>
                 {debtors.map((debtor, index) => (
-                  <tr key={index} className="border-t hover:bg-gray-50">
+                  <tr key={index} className="border-t bg-white hover:bg-gray-50">
                     <td className="p-3 font-medium">{debtor.full_name}</td>
                     <td className="p-3">{debtor.address}</td>
                     <td className="p-3">{debtor.last_payment || 'Не указано'}</td>
@@ -221,7 +233,7 @@ export default function AbonentyPage() {
               </button>
               <button
                 onClick={handleFileUpload}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className="px-4 py-2 bg-black text-white rounded"
               >
                 Загрузить
               </button>
