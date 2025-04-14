@@ -21,5 +21,5 @@ urlpatterns = [
     path('api/debt/<str:iin>/', DebtSearchView.as_view(), name='debt-search'),
     path('login/email/', LoginWithEmailView.as_view(), name='login-email'),
     path('login/iin/', LoginWithIINView.as_view(), name='login-iin'),
-    path('upload/', ExcelUploadView.as_view(), name='excel-upload'),
+    path('upload/', ExcelUploadView.as_view(), name='upload-excel'),
 ]

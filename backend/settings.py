@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders', 
     'openpyxl',
     'rest_framework_simplejwt',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE = [

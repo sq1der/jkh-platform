@@ -18,9 +18,31 @@ export default function ReportsPage() {
     const handleFileUpload = async () => {
       const file = fileInputRef.current?.files?.[0];
       if (!file) return;
+    
+      const token = localStorage.getItem('accessToken');
       const formData = new FormData();
-      formData.append('file', file);}
-
+      formData.append('file', file);
+    
+      try {
+        const res = await axios.post(
+          'http://localhost:8000/upload/',
+          formData,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+        console.log("Успешно загружено", res.data);
+        alert("Файл успешно загружен!");
+        setIsModalOpen(false);
+      } catch (err) {
+        console.error("Ошибка загрузки", err.response?.data || err.message);
+        alert("Ошибка при загрузке файла");
+      }
+    };
+    
     useEffect(() => {
     const fetchAdmin = async () => {
       const token = localStorage.getItem('accessToken');
@@ -33,6 +55,8 @@ export default function ReportsPage() {
     };
     fetchAdmin();
   }, []);
+
+  
   return (
     <div className="flex min-h-screen bg-gray-100 text-gray-800">
       {/* Sidebar */}

@@ -11,9 +11,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from .utils import process_excel_upload
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.parsers import MultiPartParser, FormParser
+
+
+from .excel_parser import parse_excel_file
+
 
 User = get_user_model()
 
@@ -118,11 +122,30 @@ class LoginWithIINView(APIView):
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ExcelUploadView(APIView):
-    def post(self, request):
-        serializer = ExcelUploadSerializer(data=request.data)
-        if serializer.is_valid():
-            upload = serializer.save(user=request.user) 
-            process_excel_upload(upload.id)
-            return Response({'status': 'File uploaded and processing started.'}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        excel_file = request.FILES.get('file')
+        if not excel_file:
+            return Response({'error': 'Файл не найден'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Создаём объект ExcelUpload
+        upload = ExcelUpload.objects.create(
+            file=excel_file,
+            user=request.user,
+            file_name=excel_file.name
+        )
+
+        # Парсим файл
+        result = parse_excel_file(upload.file.path, upload)
+
+        if result.get('success'):
+            return Response({'message': 'Файл успешно обработан'}, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'message': 'Обработка завершена с ошибками',
+                'errors': upload.error_log
+            }, status=status.HTTP_400_BAD_REQUEST)

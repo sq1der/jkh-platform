@@ -13,7 +13,7 @@ class ExcelUpload(models.Model):
     file = models.FileField(upload_to='uploads/')
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
-    file_name = models.CharField(max_length=255)  
+    file_name = models.CharField(max_length=255)   
     uploaded_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=20, choices=UPLOAD_STATUS_CHOICES, default='in_progress') 
     error_log = models.JSONField(default=dict, blank=True, null=True)
