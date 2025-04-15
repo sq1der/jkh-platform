@@ -2,127 +2,155 @@ import React from "react";
 
 export default function StructurePage() {
   return (
-    <div className="relative text-white w-full max-w-[1440px] mx-auto">
-      {/* Фоновое изображение */}
+    <div className="text-white w-full">
+      {/* Фоновый блок (на всю ширину) */}
       <div
-        className="absolute inset-0 h-[616px] bg-cover bg-center"
+        className="relative w-full h-[616px] bg-cover bg-center  overflow-hidden"
         style={{ backgroundImage: "url('/main.jpg')" }}
-      />
-
-      {/* Тёмный оверлей */}
-      <div className="absolute inset-0 h-[616px] bg-black/70" />
-
-      {/* Контент поверх фона */}
-      <div className="relative z-10 flex flex-col justify-center h-[616px] px-6">
-        {/* Логотип по макету */}
-        <img
-          src="/logo.png"
-          alt="Эмблема"
-          className="absolute top-[206px] left-[208px] w-[236px] h-[236px]"
-        />
-
-        {/* Заголовок */}
-        <h1 className="absolute top-[55px] left-[294px] w-[853px] text-[32px] font-bold uppercase font-montserrat leading-[1] tracking-[0px]">
-          Городской комитет модернизации жилья
-        </h1>
-
-        {/* Первый абзац */}
-        <p className="absolute top-[306px] left-[476px] max-w-[756px] text-[20px] leading-[1] font-montserrat font-normal text-left">
-          <span className="font-bold">Комитет модернизации жилья</span> — это специализированный орган, отвечающий за развитие, контроль и цифровизацию процессов в сфере жилищно-коммунального хозяйства города Павлодара.
-        </p>
-
-        {/* Второй абзац */}
-        <p className="absolute top-[370px] left-[476px] max-w-[756px] text-[20px] leading-[1] font-montserrat font-bold text-left">
-          Организационная структура выстроена с учетом ключевых направлений деятельности и ориентирована на обеспечение прозрачности, оперативности и эффективности принимаемых решений.
-        </p>
+      >
+        <div className="absolute inset-0 bg-black/70" />
+        <div className="relative z-10 flex flex-col items-start justify-center h-full px-6 lg:px-[208px] max-w-[1440px] mx-auto">
+          <h1 className="text-[32px] font-bold uppercase font-montserrat leading-tight max-w-[853px] mb-6">
+            Городской комитет модернизации жилья
+          </h1>
+          <div className="flex flex-col lg:flex-row gap-10 items-center">
+            <img
+              src="/logo.png"
+              alt="Эмблема"
+              className="w-[236px] h-[236px] object-contain"
+            />
+            <div className="space-y-6 max-w-[756px] text-[20px] leading-relaxed font-montserrat text-left">
+              <p>
+                <span className="font-bold">Комитет модернизации жилья</span> — это специализированный орган, отвечающий за развитие, контроль и цифровизацию процессов в сфере жилищно-коммунального хозяйства города Павлодара.
+              </p>
+              <p className="font-bold">
+                Организационная структура выстроена с учетом ключевых направлений деятельности и ориентирована на обеспечение прозрачности, оперативности и эффективности принимаемых решений.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Руководство */}
-      <section className="bg-white text-black px-6 py-12 max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold mb-10 uppercase">Руководство комитета</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex gap-6 items-start">
-            <img src="/pers1.jpg" alt="Сериков Жамбыл" className="w-32 h-40 object-cover rounded-md shadow" />
-            <div>
-              <h3 className="font-bold text-lg">Сериков Жамбыл Исламович</h3>
-              <p className="text-sm mb-2">Председатель комитета</p>
-              <p className="text-sm">Обеспечивает общее руководство деятельностью организации, принимает стратегические решения, взаимодействует с органами власти и регулирующими инстанциями.</p>
-            </div>
-          </div>
-          <div className="flex gap-6 items-start">
-            <img src="/pers2.jpg" alt="Аманжолов Данияр" className="w-32 h-40 object-cover rounded-md shadow" />
-            <div>
-              <h3 className="font-bold text-lg">Аманжолов Данияр Ихласович</h3>
-              <p className="text-sm mb-2">Заместитель председателя</p>
-              <p className="text-sm">Курирует реализацию программ модернизации, контролирует соблюдение сроков и качества выполняемых работ, координирует взаимодействие с подрядными организациями.</p>
-            </div>
+      
+  <section className="bg-white text-black px-6 py-16 max-w-7xl mx-auto">
+    <h2 className="text-4xl font-semibold mb-10 uppercase tracking-wide">
+      Руководство комитета
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      {[
+        {
+          name: "Сериков Жамбыл Исламович",
+          role: "Председатель комитета",
+          img: "/pers1.jpg",
+          desc: "Обеспечивает общее руководство деятельностью организации, принимает стратегические решения, взаимодействует с органами власти и регулирующими инстанциями.",
+        },
+        {
+          name: "Аманжолов Данияр Ихласович",
+          role: "Заместитель председателя",
+          img: "/pers2.jpg",
+          desc: "Курирует реализацию программ модернизации, контролирует соблюдение сроков и качества выполняемых работ, координирует взаимодействие с подрядными организациями.",
+        },
+      ].map((person, index) => (
+        <div key={index} className="flex gap-6 items-start">
+          <img
+            src={person.img}
+            alt={person.name}
+            className="w-32 h-40 object-cover rounded-xl shadow-lg transition-transform hover:scale-105"
+          />
+          <div>
+            <h3 className="font-semibold text-xl leading-snug">
+              {person.name}
+            </h3>
+            <p className="text-sm mb-2 font-medium text-gray-700">{person.role}</p>
+            <p className="text-sm leading-relaxed">{person.desc}</p>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </section>
 
-      {/* Подразделения */}
-      <section className="bg-white text-black px-6 py-12 max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold mb-10 uppercase">Основные подразделения</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-sm">
-          <div>
-            <h4 className="font-bold mb-2">1. Отдел цифровизации и аналитики</h4>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Разработка и внедрение программных решений</li>
-              <li>Поддержка админ-платформ и баз данных</li>
-              <li>Сбор и обработка поступающих данных из внешних источников</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-2">2. Абонентский отдел</h4>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Работа с данными по абонентам и жилым объектам</li>
-              <li>Подготовка сводных отчетов и аналитики</li>
-              <li>Взаимодействие с поставщиками коммунальных услуг</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-2">3. Отдел мониторинга объектов</h4>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Сопровождение проектов модернизации и реконструкции</li>
-              <li>Работа с геоинформационными системами</li>
-              <li>Сбор и анализ информации с объектов</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-2">4. Юридический отдел</h4>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Сопровождение договоров и правовых документов</li>
-              <li>Контроль соответствия действующему законодательству</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold mb-2">5. Отдел по связям с общественностью</h4>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Информирование жителей города о ходе работ</li>
-              <li>Поддержка открытого доступа к информации</li>
-              <li>Работа с обращениями и заявками граждан</li>
-            </ul>
-          </div>
+  {/* Подразделения */}
+  <section className="bg-white text-black px-6 py-16 max-w-7xl mx-auto">
+    <h2 className="text-4xl font-semibold mb-10 uppercase tracking-wide">
+      Основные подразделения
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-sm">
+      {[
+        {
+          title: "1. Отдел цифровизации и аналитики",
+          items: [
+            "Разработка и внедрение программных решений",
+            "Поддержка админ-платформ и баз данных",
+            "Сбор и обработка поступающих данных из внешних источников",
+          ],
+        },
+        {
+          title: "2. Абонентский отдел",
+          items: [
+            "Работа с данными по абонентам и жилым объектам",
+            "Подготовка сводных отчетов и аналитики",
+            "Взаимодействие с поставщиками коммунальных услуг",
+          ],
+        },
+        {
+          title: "3. Отдел мониторинга объектов",
+          items: [
+            "Сопровождение проектов модернизации и реконструкции",
+            "Работа с геоинформационными системами",
+            "Сбор и анализ информации с объектов",
+          ],
+        },
+        {
+          title: "4. Юридический отдел",
+          items: [
+            "Сопровождение договоров и правовых документов",
+            "Контроль соответствия действующему законодательству",
+          ],
+        },
+        {
+          title: "5. Отдел по связям с общественностью",
+          items: [
+            "Информирование жителей города о ходе работ",
+            "Поддержка открытого доступа к информации",
+            "Работа с обращениями и заявками граждан",
+          ],
+        },
+      ].map((dept, i) => (
+        <div key={i}>
+          <h4 className="font-semibold text-base mb-2 text-gray-900">
+            {dept.title}
+          </h4>
+          <ul className="list-disc list-inside space-y-1 text-gray-700">
+            {dept.items.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
         </div>
-      </section>
+      ))}
+    </div>
+  </section>
+
 
       {/* Подвал */}
-      <footer className="bg-black text-white px-6 py-8 text-sm">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center">
-          <div className="mb-4 md:mb-0">
-            <p className="font-semibold mb-1">Контакты</p>
+      <footer className="bg-black text-white px-6 py-10 text-sm">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <p className="font-semibold mb-2">Контакты</p>
             <p>Время работы: 09:00–18:00</p>
           </div>
-          <div className="mb-4 md:mb-0">
-            <p><span className="font-semibold">Телефон:</span> +7 (7182) 32-22-30</p>
-            <p><span className="font-semibold">Телефон:</span> +7 (7182) 32-22-60</p>
+          <div>
+            <p className="font-semibold mb-2">Телефон</p>
+            <p>+7 (7182) 32-22-30</p>
+            <p>+7 (7182) 32-22-60</p>
           </div>
-          <div className="mb-4 md:mb-0">
+          <div>
             <p className="text-gray-400">Отдел бухгалтерии</p>
             <p className="text-gray-400">Приемная</p>
           </div>
           <div>
-            <p><span className="font-semibold">Адрес:</span> ул. Кривенко 25</p>
+            <p className="font-semibold">Адрес:</p>
+            <p>ул. Кривенко 25</p>
           </div>
         </div>
       </footer>
