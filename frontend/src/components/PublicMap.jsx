@@ -9,8 +9,8 @@ const containerStyle = {
 }
 
 const center = {
-  lat: 0.0,
-  lng: 0.0,
+  lat: 52.2871,
+  lng: 76.9674,
 }
 
 const PublicMap = () => {

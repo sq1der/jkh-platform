@@ -41,7 +41,7 @@ const Home = () => {
           <button onClick={() => { navigate('/projects'); setMenuOpen(false); }} className="hover:underline">
             ЗАВЕРШЕННЫЕ ОБЪЕКТЫ
           </button>
-          <button onClick={() => { navigate('/debt'); setMenuOpen(false); }} className="hover:underline">
+          <button onClick={() => { navigate('/debtcheck'); setMenuOpen(false); }} className="hover:underline">
             ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
           </button>
         </nav>
