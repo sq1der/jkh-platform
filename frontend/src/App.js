@@ -4,7 +4,6 @@ import LoginByIIN from './components/LoginByIIN';
 import Abonents from './components/Abonents';
 import PublicMap from './components/PublicMap';
 import OverviewPage from './components/OverviewPage';
-import SidebarMenu from './components/SidebarMenu';
 import Home from './components/Home';
 import DebtCheckPage from './components/DebtCheckPage';
 import OrganizationStructure from './components/OrganizationStructure';
@@ -20,7 +19,6 @@ const App = () => {
         <Route path="/login-iin" element={<LoginByIIN />} />
         <Route path="/test-map" element={<PublicMap />} />
         <Route path="/overview-page" element={<OverviewPage />} />
-        <Route path="/sidebar-menu" element={<SidebarMenu />} />
         <Route path="/home-page" element={<Home />} />
         <Route path="/debtcheck" element={<DebtCheckPage/>} />
         <Route path="/organization" element={<OrganizationStructure/>} />
