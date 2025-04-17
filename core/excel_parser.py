@@ -1,22 +1,11 @@
 import pandas as pd
 from django.db import transaction
 from datetime import datetime
-from .models import Debtor, Payment, Building, ExcelUpload
+from .models import Debtor, Payment, ExcelUpload
 from decimal import Decimal
 
-REQUIRED_COLUMNS = ['ACCOUNT', 'SERVICE_ID', 'PAY_SUM', 'ADDRESS', 'PAY_DATE']
 
-def normalize_address(address):
-    return (
-        address.strip()
-        .lower()
-        .replace('г.', '')
-        .replace('ул.', '')
-        .replace('д.', '')
-        .replace('.', '')
-        .replace(',', '')
-        .replace(' ', '')
-    )
+REQUIRED_COLUMNS = ['ACCOUNT', 'SERVICE_ID', 'PAY_SUM', 'ADDRESS', 'PAY_DATE']
 
 def parse_excel_file(file_path, upload: ExcelUpload):
     error_log = []
@@ -32,7 +21,6 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                 return {'success': False, 'error': f'Отсутствует колонка: {col}'}
 
         df = df[df['SERVICE_ID'] == 1061]
-
         df = df[df['PAY_DATE'].notnull()]
         if df.empty:
             upload.status = 'error'
@@ -45,36 +33,13 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                 try:
                     account = str(row['ACCOUNT']).strip()
                     pay_sum = Decimal(str(row['PAY_SUM']))
-                    address = str(row['ADDRESS']).strip()
                     pay_date = pd.to_datetime(row['PAY_DATE']).date()
 
-                    normalized_address = normalize_address(address)
+                    debtor = Debtor.objects.filter(personal_account=account).first()
 
-                    all_buildings = list(Building.objects.all())
-                    building = next(
-                        (b for b in all_buildings if normalize_address(b.address) == normalized_address),
-                        None
-                    )
+                    if not debtor:
+                        raise ValueError(f"Должник с аккаунтом {account} не найден")
 
-                    if not building:
-                        raise ValueError(f"Здание не найдено по адресу: {address}")
-
-                    iin = account[:12] if len(account) >= 12 else None
-
-                    debtor, created = Debtor.objects.get_or_create(
-                        personal_account=account,
-                        defaults={
-                            'iin': iin,
-                            'address': address,
-                            'full_name': '',
-                            'status': 'active',
-                            'current_debt': 0,
-                            'building': building
-                        }
-                    )
-
-                    if not debtor.building:
-                        debtor.building = building
 
                     Payment.objects.create(
                         amount=pay_sum,
