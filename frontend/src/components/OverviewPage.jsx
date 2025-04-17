@@ -3,10 +3,14 @@ import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-map
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { Pie } from 'react-chartjs-2';
+import { Chart } from 'chart.js';
 import 'chart.js/auto';
 import { Link, useLocation } from 'react-router-dom';
 import React from 'react';
 import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
+import ChartDataLabels from 'chartjs-plugin-datalabels';  
+
+Chart.register(ChartDataLabels);
 
 const center = { lat: 52.2871, lng: 76.9674 };
 
@@ -92,15 +96,36 @@ export default function Overview() {
   };
 
   const pieChartData = {
-    labels: ['Район 1', 'Район 2', 'Район 3'],
+    labels: ['Баянаульский район', 'Железинский район', 'Иртышский район', 'Теренкольский район' ],
     datasets: [
       {
         label: 'Количество объектов',
-        data: [5, 3, 2],
-        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B'],
+        data: [32, 24, 20, 15],
+        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#800080'],
       },
     ],
   };
+
+  const pieChartOptions = {
+    plugins: {
+      datalabels: {
+        formatter: (value, ctx) => {
+          const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
+          const percentage = ((value / total) * 100).toFixed(2);
+          return `${percentage}%`;  
+        },
+        color: 'white',  
+        font: {
+          weight: 'bold',  
+          size: 14,  
+        },
+      },
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+
+
 
   if (!isLoaded) return <div>Загрузка карты...</div>;
 
@@ -169,9 +194,9 @@ export default function Overview() {
             </div>
 
             {/* Диаграмма */}
-            <div className="bg-white p-4 rounded-2xl shadow">
+            <div className="bg-white p-4 rounded-2xl shadow h-[700px]">
               <h3 className="font-semibold mb-2">Распределение по районам</h3>
-              <Pie data={pieChartData} />
+              <Pie data={pieChartData} options={pieChartOptions} />
             </div>
           </div>
 
@@ -180,7 +205,7 @@ export default function Overview() {
           <h2 className="text-2xl font-semibold">Карта</h2>
 
           
-          <div className="rounded-lg shadow overflow-hidden h-[600px]">
+          <div className="rounded-lg shadow overflow-hidden h-[810px]">
             <GoogleMap
               center={center}
               zoom={13}
@@ -196,18 +221,33 @@ export default function Overview() {
 
               {selectedBuilding && (
                 <InfoWindow
-                  position={{ lat: selectedBuilding.lat, lng: selectedBuilding.lng }}
-                  onCloseClick={() => setSelectedBuilding(null)}
-                >
-                  <div className="text-sm w-64 transition duration-300 animate-fade-in">
-                    <h3 className="font-bold mb-1">{selectedBuilding.address}</h3>
-                    <p>Жильцов: {selectedBuilding.total_residents}</p>
-                    <p>Должников: {selectedBuilding.total_debtors}</p>
-                    <p>Задолженность: {selectedBuilding.total_debt} ₸</p>
-                    <button className="mt-2 bg-black text-white px-2 py-1 rounded text-xs hover:bg-gray-800">
-                      Просмотреть абонентов
-                    </button>
-                  </div>
+                position={{ lat: selectedBuilding.lat, lng: selectedBuilding.lng }}
+                onCloseClick={() => setSelectedBuilding(null)}
+              >
+                <div className="text-sm w-72 transition duration-300 animate-fade-in">
+                  <h3 className="font-bold mb-1">{selectedBuilding.address}</h3>
+                  <p>Жильцов: {selectedBuilding.total_residents}</p>
+                  <p>Должников: {selectedBuilding.total_debtors}</p>
+                  <p>Задолженность: {selectedBuilding.total_debt} ₸</p>
+            
+                  {selectedBuilding.debtors?.length > 0 && (
+                    <div className="mt-2">
+                      <p className="font-semibold">Должники:</p>
+                      <ul className="list-disc list-inside text-xs max-h-24 overflow-y-auto">
+                        {selectedBuilding.debtors.map((debtor, idx) => (
+                          <li key={idx}>{debtor.name} — {debtor.amount} ₸</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+            
+                  <Link
+                    to={`/abonents`}
+                    className="mt-3 inline-block bg-black text-white px-3 py-1 rounded text-xs hover:bg-gray-800"
+                  >
+                    Перейти к абонентам
+                  </Link>
+                </div>
                 </InfoWindow>
               )}
             </GoogleMap>

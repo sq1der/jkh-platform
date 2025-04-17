@@ -1,11 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PublicMap from './PublicMap';
 import { Menu, X } from 'lucide-react';
+import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
+import { Link, useLocation } from 'react-router-dom';
+import axios from 'axios';
+
+
+const center = { lat: 52.2871, lng: 76.9674 };
+
 
 const Home = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [buildings, setBuildings] = useState([]);
+  const [selectedBuilding, setSelectedBuilding] = useState(null);
+
+  const { isLoaded } = useJsApiLoader({
+      googleMapsApiKey: "AIzaSyCcedIxvffvLDKZM3mFjDBhV6ow8UplfOc",
+  });
+
+  useEffect(() => {
+    const fetchBuildings = async () => {
+      try {
+        const res = await axios.get('http://localhost:8000/api/buildings/', {
+        });
+
+        const parsed = res.data.map(item => {
+          const matches = item.location.match(/POINT \(([-\d.]+) ([-\d.]+)\)/);
+          return {
+            ...item,
+            lat: parseFloat(matches?.[2]),
+            lng: parseFloat(matches?.[1])
+          };
+        });
+
+        setBuildings(parsed);
+      } catch (err) {
+        console.error('Ошибка загрузки зданий:', err);
+      }
+    };
+
+    fetchBuildings();
+  }, []);
+
+  if (!isLoaded) return <div>Загрузка карты...</div>;
 
   return (
     <div className="font-sans text-white bg-[#121212] relative overflow-x-hidden">
@@ -130,9 +168,47 @@ const Home = () => {
 
       {/* Карта */}
       <section className="bg-white px-6 py-12">
-        <div className="rounded-2xl overflow-hidden shadow-lg max-w-[1280px] mx-auto h-[600px]">
-          <PublicMap />
-        </div>
+        <div className="rounded-lg shadow overflow-hidden h-[810px]">
+            <GoogleMap
+              center={center}
+              zoom={13}
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+            >
+              {buildings.map(b => (
+                <Marker
+                  key={b.id}
+                  position={{ lat: b.lat, lng: b.lng }}
+                  onClick={() => setSelectedBuilding(b)}
+                />
+              ))}
+
+              {selectedBuilding && (
+                <InfoWindow
+                position={{ lat: selectedBuilding.lat, lng: selectedBuilding.lng }}
+                onCloseClick={() => setSelectedBuilding(null)}
+              >
+                <div className="text-sm w-72 transition duration-300 animate-fade-in">
+                  <h3 className="font-bold text-black mb-1">{selectedBuilding.address}</h3>
+                  <p className='text-black'>Жильцов: {selectedBuilding.total_residents}</p>
+                  <p className='text-black'>Должников: {selectedBuilding.total_debtors}</p>
+                  <p className='text-black'>Задолженность: {selectedBuilding.total_debt} ₸</p>
+            
+                  {selectedBuilding.debtors?.length > 0 && (
+                    <div className="mt-2">
+                      <p className="font-semibold">Должники:</p>
+                      <ul className="list-disc list-inside text-xs max-h-24 overflow-y-auto">
+                        {selectedBuilding.debtors.map((debtor, idx) => (
+                          <li key={idx}>{debtor.name} — {debtor.amount} ₸</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+          
+                </div>
+                </InfoWindow>
+              )}
+            </GoogleMap>
+            </div>
       </section>
 
       {/* Футер */}

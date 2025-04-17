@@ -39,6 +39,7 @@ class DebtorViewSet(viewsets.ModelViewSet):
     serializer_class = DebtorSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['building']
     search_fields = ['full_name', 'iin', 'address']
     ordering_fields = ['full_name', 'last_payment', 'current_debt']
     ordering = ['full_name']

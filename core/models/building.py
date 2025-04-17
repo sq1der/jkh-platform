@@ -9,7 +9,6 @@ def default_location():
 
 class Building(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
-    name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     location = gis_models.PointField(geography=True, default=default_location)
     total_residents = models.IntegerField() 

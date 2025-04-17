@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/login-iin" element={<LoginByIIN />} />
         <Route path="/test-map" element={<PublicMap />} />
         <Route path="/overview-page" element={<OverviewPage />} />
-        <Route path="/home-page" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/debtcheck" element={<DebtCheckPage/>} />
         <Route path="/organization" element={<OrganizationStructure/>} />
         <Route path="/report" element={<ReportsPage/>} />

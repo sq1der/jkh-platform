@@ -17,6 +17,7 @@ export default function AbonentyPage() {
   const fileInputRef = useRef(null);
 
   const accessToken = localStorage.getItem('accessToken');
+  
 
   useEffect(() => {
     const fetchAdminData = async () => {
