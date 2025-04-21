@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SidebarMenu from '../components/SidebarMenu';
 
 const projects = [
@@ -41,11 +42,12 @@ const projects = [
 ];
 
 const CompletedProjects = () => {
+  const navigate = useNavigate(); // moved inside the component
+
   return (
-    
     <div className="min-h-screen flex flex-col bg-[#121212] text-black relative">
-    {/* Меню бар */}
-    <SidebarMenu />
+      {/* Меню бар */}
+      <SidebarMenu />
       {/* Контент страницы */}
       <div className="flex-1 bg-white px-4 md:px-16 pb-24">
         <h1 className="text-3xl md:text-4xl font-bold text-center text-[#0075C9] py-10">
@@ -73,7 +75,10 @@ const CompletedProjects = () => {
                     {project.description}
                   </p>
                 </div>
-                <button className="mt-4 w-[130px] bg-[#00B2FF] text-white text-sm py-2 rounded hover:bg-[#009BDB] transition">
+                <button
+                  onClick={() => navigate('/project')}
+                  className="mt-4 w-[130px] bg-[#00B2FF] text-white text-sm py-2 rounded hover:bg-[#009BDB] transition"
+                >
                   Подробнее
                 </button>
               </div>

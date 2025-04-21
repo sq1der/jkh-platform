@@ -9,21 +9,19 @@ const SidebarMenu = () => {
   const location = useLocation();
 
   // Функция для получения цвета иконки в зависимости от маршрута
-  const getIconColor = (path) => {
-    if (location.pathname === '/' || '/organization' || '/activity'|| '/debtcheck') {
-      return 'white'; // цвет иконки для активного маршрута
-    }
-    return 'black'; // цвет иконки для неактивных маршрутов
+  const getIconColor = () => {
+    const activePaths = ['/', '/organization', '/activity', '/debtcheck'];
+    return activePaths.includes(location.pathname) ? 'text-white' : 'text-black';
   };
 
   return (
     <>
       {!menuOpen && (
         <button
-          className="fixed z-50 top-[51px] left-[26px] w-[48px] h-[48px] flex items-center justify-center"
+          className="fixed z-50 top-[20px] left-[26px] w-[48px] h-[48px] flex items-center justify-center"
           onClick={() => setMenuOpen(true)}
         >
-          <Menu size={32} color={getIconColor('/')} />
+          <Menu size={32} className={getIconColor()} />
         </button>
       )}
 
@@ -43,30 +41,38 @@ const SidebarMenu = () => {
 
         <nav className="flex flex-col gap-6 text-[13px] font-medium leading-snug">
           <button
-            onClick={() => { navigate('/activity'); setMenuOpen(false); }}
+            onClick={() => {
+              navigate('/activity');
+              setMenuOpen(false);
+            }}
             className="text-left"
-            
           >
             О ДЕЯТЕЛЬНОСТИ
           </button>
           <button
-            onClick={() => { navigate('/organization'); setMenuOpen(false); }}
-            className="text-left text-white"
-            
+            onClick={() => {
+              navigate('/organization');
+              setMenuOpen(false);
+            }}
+            className="text-left"
           >
             СТРУКТУРА ОРГАНИЗАЦИИ
           </button>
           <button
-            onClick={() => { navigate('/compl'); setMenuOpen(false); }}
+            onClick={() => {
+              navigate('/compl');
+              setMenuOpen(false);
+            }}
             className="text-left"
-            
           >
             ЗАВЕРШЕННЫЕ ОБЪЕКТЫ
           </button>
           <button
-            onClick={() => { navigate('/debtcheck'); setMenuOpen(false); }}
+            onClick={() => {
+              navigate('/debtcheck');
+              setMenuOpen(false);
+            }}
             className="text-left"
-            
           >
             ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
           </button>

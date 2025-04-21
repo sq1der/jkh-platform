@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { Link, useLocation } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import React from 'react';
 import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
 import { SidebarItem } from './OverviewPage';
