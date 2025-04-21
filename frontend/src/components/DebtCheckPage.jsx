@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import SidebarMenu from '../components/SidebarMenu';
 
 const DebtInfoPage = () => {
   const [iin, setIin] = useState('');
@@ -21,6 +22,8 @@ const DebtInfoPage = () => {
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
+      {/* Меню бар */}
+      <SidebarMenu />
       {/* Хедер с фоном */}
       <header
         className="h-96 bg-cover bg-center relative flex flex-col justify-center items-center px-6"

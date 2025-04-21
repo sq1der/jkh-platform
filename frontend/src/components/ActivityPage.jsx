@@ -1,8 +1,11 @@
 import React from "react";
-
+import SidebarMenu from '../components/SidebarMenu';
 export default function ActivityPage() {
   return (
     <div className="text-black">
+      {/* Меню бар */}
+      <SidebarMenu />
+      
       {/* Хедер */}
       <header
         className="relative h-[620px] bg-cover bg-center text-white px-6 md:px-16 flex items-center justify-center"

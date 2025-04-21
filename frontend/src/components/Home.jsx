@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import SidebarMenu from '../components/SidebarMenu';
+
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
-import { Link, useLocation } from 'react-router-dom';
+
 import axios from 'axios';
 
 
@@ -11,7 +12,7 @@ const center = { lat: 52.2871, lng: 76.9674 };
 
 const Home = () => {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
+  
   const [buildings, setBuildings] = useState([]);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
 
@@ -46,44 +47,10 @@ const Home = () => {
   if (!isLoaded) return <div>Загрузка карты...</div>;
 
   return (
-    <div className="font-sans text-white bg-[#121212] relative overflow-x-hidden">
-      {/* Кнопка меню */}
-      {!menuOpen && (
-        <button
-          className="fixed z-50 top-[51px] left-[26px] w-[48px] h-[48px] flex items-center justify-center text-white"
-          onClick={() => setMenuOpen(true)}
-        >
-          <Menu size={32} />
-        </button>
-      )}
-
-      {/* Меню */}
-      <div
-        className={`fixed top-0 left-0 h-full w-80 bg-[#1E1E1E] text-white z-40 px-6 py-10 transition-transform duration-300 ${
-          menuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        {/* Кнопка закрытия */}
-        <button className="mb-8 text-white" onClick={() => setMenuOpen(false)}>
-          <X size={32} />
-        </button>
-
-        <h2 className="text-xl font-bold mb-8">КОМИТЕТ МОДЕРНИЗАЦИИ ЖИЛЬЯ</h2>
-        <nav className="flex flex-col gap-6 text-lg">
-          <button onClick={() => { navigate('/activity'); setMenuOpen(false); }} className="hover:underline">
-            О ДЕЯТЕЛЬНОСТИ
-          </button>
-          <button onClick={() => { navigate('/organization'); setMenuOpen(false); }} className="hover:underline">
-            СТРУКТУРА ОРГАНИЗАЦИИ
-          </button>
-          <button onClick={() => { navigate('/projects'); setMenuOpen(false); }} className="hover:underline">
-            ЗАВЕРШЕННЫЕ ОБЪЕКТЫ
-          </button>
-          <button onClick={() => { navigate('/debt'); setMenuOpen(false); }} className="hover:underline">
-            ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
-          </button>
-        </nav>
-      </div>
+    <div className="min-h-screen flex flex-col bg-[#ffffff] text-white relative">
+    {/* Меню бар */}
+    <SidebarMenu />
+      
 
       {/* Хедер */}
       <header
@@ -91,7 +58,7 @@ const Home = () => {
         style={{ backgroundImage: "url('/main.jpg')" }}
       >
         <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-snug mb-6 uppercase">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-snug mb-6 uppercase text-white">
             Городской комитет модернизации жилья
           </h1>
           <img src="/logo.png" alt="Логотип" className="w-36 md:w-44 mb-6" />

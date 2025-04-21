@@ -1,25 +1,20 @@
-// components/SidebarMenu.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const SidebarMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLightBackground, setIsLightBackground] = useState(true);
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
+  const location = useLocation();
 
-  // Проверка фона на основе наличия компонента
-  useEffect(() => {
-    const checkBackgroundColor = () => {
-      if (sidebarRef.current) {
-        const bgColor = window.getComputedStyle(sidebarRef.current).backgroundColor;
-        // Если фон не темный (черный), то считаем, что он светлый
-        setIsLightBackground(bgColor !== 'rgb(30, 30, 30)'); // rgb(30, 30, 30) это цвет фона в вашем примере
-      }
-    };
-    checkBackgroundColor();
-  }, [menuOpen]);
+  // Функция для получения цвета иконки в зависимости от маршрута
+  const getIconColor = (path) => {
+    if (location.pathname === '/' || '/organization' || '/activity'|| '/debtcheck') {
+      return 'white'; // цвет иконки для активного маршрута
+    }
+    return 'black'; // цвет иконки для неактивных маршрутов
+  };
 
   return (
     <>
@@ -28,7 +23,7 @@ const SidebarMenu = () => {
           className="fixed z-50 top-[51px] left-[26px] w-[48px] h-[48px] flex items-center justify-center"
           onClick={() => setMenuOpen(true)}
         >
-          <Menu size={32} color={isLightBackground ? 'black' : 'white'} />
+          <Menu size={32} color={getIconColor('/')} />
         </button>
       )}
 
@@ -39,21 +34,40 @@ const SidebarMenu = () => {
         }`}
       >
         <button className="mb-8" onClick={() => setMenuOpen(false)}>
-          <X size={32} color={isLightBackground ? 'black' : 'white'} />
+          <X size={32} className="text-white" />
         </button>
 
-        <h2 className="text-xl font-bold mb-8">КОМИТЕТ МОДЕРНИЗАЦИИ ЖИЛЬЯ</h2>
-        <nav className="flex flex-col gap-6 text-lg">
-          <button onClick={() => { navigate('/activity'); setMenuOpen(false); }} className="hover:underline">
+        <h2 className="text-[16px] font-bold leading-tight uppercase tracking-wide mb-10">
+          КОМИТЕТ <br /> МОДЕРНИЗАЦИИ ЖИЛЬЯ
+        </h2>
+
+        <nav className="flex flex-col gap-6 text-[13px] font-medium leading-snug">
+          <button
+            onClick={() => { navigate('/activity'); setMenuOpen(false); }}
+            className="text-left"
+            
+          >
             О ДЕЯТЕЛЬНОСТИ
           </button>
-          <button onClick={() => { navigate('/organization'); setMenuOpen(false); }} className="hover:underline">
+          <button
+            onClick={() => { navigate('/organization'); setMenuOpen(false); }}
+            className="text-left text-white"
+            
+          >
             СТРУКТУРА ОРГАНИЗАЦИИ
           </button>
-          <button onClick={() => { navigate('/projects'); setMenuOpen(false); }} className="hover:underline">
+          <button
+            onClick={() => { navigate('/projects'); setMenuOpen(false); }}
+            className="text-left"
+            
+          >
             ЗАВЕРШЕННЫЕ ОБЪЕКТЫ
           </button>
-          <button onClick={() => { navigate('/debt'); setMenuOpen(false); }} className="hover:underline">
+          <button
+            onClick={() => { navigate('/debtcheck'); setMenuOpen(false); }}
+            className="text-left"
+            
+          >
             ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
           </button>
         </nav>

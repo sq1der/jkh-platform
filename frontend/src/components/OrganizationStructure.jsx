@@ -1,8 +1,10 @@
 import React from "react";
-
+import SidebarMenu from '../components/SidebarMenu';
 export default function StructurePage() {
   return (
     <div className="text-white w-full">
+      {/* Меню бар */}
+      <SidebarMenu />
       {/* Фоновый блок (на всю ширину) */}
       <div
         className="relative w-full h-[616px] bg-cover bg-center  overflow-hidden"
