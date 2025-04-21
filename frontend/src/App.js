@@ -9,7 +9,7 @@ import DebtCheckPage from './components/DebtCheckPage';
 import OrganizationStructure from './components/OrganizationStructure';
 import ReportsPage from './components/ReportPage';
 import ActivityPage from './components/ActivityPage';
-
+import Completed from './components/Completed';
 const App = () => {
   return (
     <Router>
@@ -24,6 +24,7 @@ const App = () => {
         <Route path="/organization" element={<OrganizationStructure/>} />
         <Route path="/report" element={<ReportsPage/>} />
         <Route path="/activity" element={<ActivityPage/>} />
+        <Route path="/compl" element={<Completed/>} />
       </Routes>
     </Router>
   );

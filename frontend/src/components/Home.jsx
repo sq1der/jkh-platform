@@ -70,7 +70,7 @@ const Home = () => {
 
         <h2 className="text-xl font-bold mb-8">КОМИТЕТ МОДЕРНИЗАЦИИ ЖИЛЬЯ</h2>
         <nav className="flex flex-col gap-6 text-lg">
-          <button onClick={() => { navigate('/about'); setMenuOpen(false); }} className="hover:underline">
+          <button onClick={() => { navigate('/activity'); setMenuOpen(false); }} className="hover:underline">
             О ДЕЯТЕЛЬНОСТИ
           </button>
           <button onClick={() => { navigate('/organization'); setMenuOpen(false); }} className="hover:underline">
@@ -79,7 +79,7 @@ const Home = () => {
           <button onClick={() => { navigate('/projects'); setMenuOpen(false); }} className="hover:underline">
             ЗАВЕРШЕННЫЕ ОБЪЕКТЫ
           </button>
-          <button onClick={() => { navigate('/debtcheck'); setMenuOpen(false); }} className="hover:underline">
+          <button onClick={() => { navigate('/debt'); setMenuOpen(false); }} className="hover:underline">
             ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
           </button>
         </nav>
@@ -96,35 +96,50 @@ const Home = () => {
           </h1>
           <img src="/logo.png" alt="Логотип" className="w-36 md:w-44 mb-6" />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 max-w-6xl w-full">
-            {[
-              {
-                title: 'Реконструкция тепловых сетей',
-                text: 'В Павлодарской области запланировано строительство и ремонт более трёх десятков километров тепловых магистралей. Финансирование этих проектов осуществляется из резерва правительства по поручению главы государства.',
-              },
-              {
-                title: 'Модернизация энергетического сектора',
-                text: 'Проект, утверждённый правительством Казахстана и рассчитанный на 2025–2029 годы, направлен на поэтапное снижение износа инфраструктуры, включая системы водоснабжения и водоотведения.',
-              },
-              {
-                title: 'Госпрограмма развития ЖКХ',
-                text: 'Программа консолидирует меры государственной поддержки в сфере модернизации и развития системы ЖКХ, включая вопросы модернизации коммунальной инфраструктуры, систем тепло-, водоснабжения и водоотведения.',
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="bg-white text-black rounded-xl p-4 text-sm shadow-md transition-colors duration-300 hover:bg-[#05A7E3] hover:text-white"
-              >
-                <h3 className="font-bold mb-2 text-sm">{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            ))}
+          <div className="mt-40">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-64 max-w-7xl w-full px-1 justify-items-center">
+              {[
+                {
+                  title: 'Реконструкция тепловых сетей',
+                  text: 'В Павлодарской области запланировано строительство и ремонт более трёх десятков километров тепловых магистралей. Финансирование этих проектов осуществляется из резерва правительства по поручению главы государства.',
+                  bg: 'bg-white',
+                  textColor: 'text-black',
+                },
+                {
+                  title: 'Модернизация энергетического и коммунального секторов',
+                  text: 'Проект, утверждённый правительством Казахстана и рассчитанный на 2025–2029 годы, направлен на поэтапное снижение износа инфраструктуры, включая системы водоснабжения и водоотведения.',
+                  bg: 'bg-white',
+                  textColor: 'text-black',
+                },
+                {
+                  title: 'Государственная программа жилищно-коммунального развития "Нурлы жер"',
+                  text: 'Программа консолидирует меры государственной поддержки в сфере модернизации и развития системы ЖКХ, включая вопросы модернизации коммунальной инфраструктуры, систем тепло-, водоснабжения и водоотведения.',
+                  bg: 'bg-white',
+                  textColor: 'text-black',
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className={`${item.bg} ${item.textColor} rounded-[20px] p-6 w-full md:w-[420px] h-auto shadow-lg text-[16px] transition-colors duration-300 hover:bg-[#05A7E3] hover:text-white`}
+                >
+                  <h3 className="font-bold mb-3 text-lg">{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
           </div>
+
+
+
+
+
+
+
         </div>
       </header>
 
       {/* Фотографии города */}
-      <section className="bg-white grid grid-cols-1 md:grid-cols-3 gap-6 px-6 py-12">
+      <section className="bg-white grid grid-cols-1 md:grid-cols-3 gap-4 px-6 py-16">
         {['city1.jpg', 'city2.jpg', 'city3.jpg'].map((src, idx) => (
           <img
             key={idx}
@@ -136,20 +151,31 @@ const Home = () => {
       </section>
 
       {/* Кнопки */}
-      <section className="bg-white flex flex-col md:flex-row justify-center gap-8 px-6 pb-20">
-        <button className="bg-[#2E2E2E] text-white py-3 px-6 w-[300px] rounded-[20px] font-semibold shadow">
-          О деятельности
-        </button>
-        <button
-          className="bg-[#2E2E2E] text-white py-3 px-6 w-[300px] rounded-[20px] font-semibold shadow"
-          onClick={() => navigate('/organization')}
-        >
-          Структура организации
-        </button>
-        <button className="bg-[#2E2E2E] text-white py-3 px-6 w-[300px] rounded-[20px] font-semibold shadow">
-          Завершенные объекты
-        </button>
+      <section className="bg-white flex justify-center px-6 pt-0 pb-20">
+        <div className="flex flex-row justify-between gap-x-10 max-w-[1630px] w-full">
+          <button
+            className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
+            onClick={() => navigate('/activity')}
+          >
+            О деятельности
+          </button>
+          <button
+            className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
+            onClick={() => navigate('/organization')}
+          >
+            Структура организации
+          </button>
+          <button
+            className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
+            onClick={() => navigate('/projects')}
+          >
+            Завершенные объекты
+          </button>
+        </div>
       </section>
+
+
+
 
       {/* Проверка задолженности */}
       <section className="bg-white py-10 px-6 text-white flex justify-center">
