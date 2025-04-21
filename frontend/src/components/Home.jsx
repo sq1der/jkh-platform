@@ -12,6 +12,8 @@ const center = { lat: 52.2871, lng: 76.9674 };
 
 const Home = () => {
   const navigate = useNavigate();
+  const [iin, setIin] = useState('');
+  const [loading, setLoading] = useState(false);
   
   const [buildings, setBuildings] = useState([]);
   const [selectedBuilding, setSelectedBuilding] = useState(null);
@@ -19,6 +21,30 @@ const Home = () => {
   const { isLoaded } = useJsApiLoader({
       googleMapsApiKey: "AIzaSyCcedIxvffvLDKZM3mFjDBhV6ow8UplfOc",
   });
+  const handleCheckDebt = async () => {
+    if (!iin) {
+      alert("Пожалуйста, введите ваш ИИН.");
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      // Отправляем запрос на сервер для проверки задолженности
+      const response = await axios.get(`http://localhost:8000/api/debtcheck/${iin}`);
+      
+      // Если данные получены, перенаправляем на страницу с результатами
+      if (response.data) {
+        navigate('/debtcheck', { state: { debtInfo: response.data } });
+      } else {
+        alert('Нет данных по задолженности для данного ИИН.');
+      }
+    } catch (error) {
+      console.error('Ошибка при проверке задолженности:', error);
+      alert('Произошла ошибка при проверке задолженности.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchBuildings = async () => {
@@ -47,7 +73,7 @@ const Home = () => {
   if (!isLoaded) return <div>Загрузка карты...</div>;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#ffffff] text-white relative">
+    <div className="min-h-screen flex flex-col bg-[#121212] text-black relative">
     {/* Меню бар */}
     <SidebarMenu />
       
@@ -143,9 +169,8 @@ const Home = () => {
 
 
 
-
       {/* Проверка задолженности */}
-      <section className="bg-white py-10 px-6 text-white flex justify-center">
+       <section className="bg-white py-10 px-6 text-white flex justify-center">
         <div className="bg-[#05A7E3] rounded-2xl shadow-lg px-6 py-8 w-full max-w-4xl text-center">
           <h2 className="text-2xl font-semibold mb-6">Посмотреть задолженность</h2>
           <div className="flex flex-col md:flex-row justify-center items-center gap-4">
@@ -153,8 +178,16 @@ const Home = () => {
               type="text"
               placeholder="Введите ваш ИИН"
               className="w-full md:w-[680px] px-5 py-3 rounded-[20px] text-black"
+              value={iin}
+              onChange={(e) => setIin(e.target.value)}
             />
-            <button className="bg-[#2E2E2E] px-8 py-3 rounded-[20px] font-semibold">Проверить</button>
+            <button 
+              className="bg-[#2E2E2E] px-8 py-3 rounded-[20px] font-semibold"
+              onClick={handleCheckDebt}
+              disabled={loading}
+            >
+              {loading ? 'Загрузка...' : 'Проверить'}
+            </button>
           </div>
         </div>
       </section>

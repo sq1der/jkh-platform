@@ -11,10 +11,12 @@ const DebtInfoPage = () => {
     if (!iin) return;
 
     try {
+      // Запрос на сервер для получения информации по ИИН
       const response = await axios.get(`http://localhost:8000/api/debt/${iin}/`);
-      setData(response.data);
-      setError('');
+      setData(response.data); // Обработка данных о задолженности
+      setError(''); // Очистка ошибок, если данные получены
     } catch (err) {
+      // Обработка ошибки, если данные не найдены
       setError('Информация не найдена');
       setData(null);
     }
@@ -57,9 +59,7 @@ const DebtInfoPage = () => {
         {data && (
           <>
             <div>
-              <h2 className="text-lg font-semibold mb-2">
-                {data.address}
-              </h2>
+              <h2 className="text-lg font-semibold mb-2">{data.address}</h2>
               <p className="mb-1">
                 Сумма задолженности: <span className="font-semibold">{data.current_debt} тенге</span>
               </p>
