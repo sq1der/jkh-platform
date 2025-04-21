@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import SidebarMenu from '../components/SidebarMenu';
 
 const DebtInfoPage = () => {
   const [iin, setIin] = useState('');
@@ -11,12 +10,12 @@ const DebtInfoPage = () => {
     if (!iin) return;
 
     try {
-      // Запрос на сервер для получения информации по ИИН
       const response = await axios.get(`http://localhost:8000/api/debt/${iin}/`);
-      setData(response.data); // Обработка данных о задолженности
-      setError(''); // Очистка ошибок, если данные получены
+      console.log('Ответ от сервера:', response.data);
+      setData(response.data.debt);
+      setError('');
     } catch (err) {
-      // Обработка ошибки, если данные не найдены
+      console.error('Ошибка запроса:', err);
       setError('Информация не найдена');
       setData(null);
     }
@@ -24,8 +23,6 @@ const DebtInfoPage = () => {
 
   return (
     <div className="bg-white min-h-screen flex flex-col">
-      {/* Меню бар */}
-      <SidebarMenu />
       {/* Хедер с фоном */}
       <header
         className="h-96 bg-cover bg-center relative flex flex-col justify-center items-center px-6"
@@ -59,34 +56,12 @@ const DebtInfoPage = () => {
         {data && (
           <>
             <div>
-              <h2 className="text-lg font-semibold mb-2">{data.address}</h2>
+              <h2 className="text-lg font-semibold mb-2">
+                {data.address}
+              </h2>
               <p className="mb-1">
                 Сумма задолженности: <span className="font-semibold">{data.current_debt} тенге</span>
               </p>
-              <p>
-                Остаток срока: <span className="font-semibold">{data.years_left} {data.years_left === 1 ? 'год' : 'года'}</span>
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-md font-semibold mb-4">Информация об объекте</h3>
-              <ul className="space-y-1 text-sm">
-                <li>
-                  <span className="font-semibold">Тип объекта:</span> {data.building_type}
-                </li>
-                <li>
-                  <span className="font-semibold">Год постройки:</span> {data.year_built}
-                </li>
-                <li>
-                  <span className="font-semibold">Тип дома:</span> {data.structure_type}
-                </li>
-                <li>
-                  <span className="font-semibold">Количество жильцов:</span> {data.residents}
-                </li>
-                <li>
-                  <span className="font-semibold">Количество квартир:</span> {data.apartments}
-                </li>
-              </ul>
             </div>
           </>
         )}

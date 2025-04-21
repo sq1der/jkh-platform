@@ -15,6 +15,7 @@ export default function AbonentyPage() {
   const [adminName, setAdminName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   const accessToken = localStorage.getItem('accessToken');
   
@@ -49,49 +50,53 @@ export default function AbonentyPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
-
-      let queryParams = [];
-
-      if (searchTerm) {
-        queryParams.push(`search=${searchTerm}`);
-      }
-
-      if (period !== 'all') {
-        const fromDate = new Date();
-        if (period === 'month') fromDate.setMonth(fromDate.getMonth() - 1);
-        queryParams.push(`from_date=${fromDate.toISOString().split('T')[0]}`);
-      }
-
-      if (debtStatus !== 'all') {
-        queryParams.push(`status=${debtStatus}`);
-      }
-
-      const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
-
+  
       try {
+        const queryParams = [];
+  
+        if (searchTerm) {
+          queryParams.push(`search=${encodeURIComponent(searchTerm)}`);
+        }
+  
+        if (period !== 'all') {
+          const fromDate = new Date();
+          if (period === 'month') {
+            fromDate.setMonth(fromDate.getMonth() - 1);
+          }
+          const fromDateStr = fromDate.toISOString().split('T')[0];
+          queryParams.push(`from_date=${fromDateStr}`);
+        }
+  
+        if (debtStatus !== 'all') {
+          queryParams.push(`status=${debtStatus}`);
+        }
+  
+        const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
+  
         const response = await fetch(`http://localhost:8000/api/debtors/${queryString}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
           },
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          setDebtors(data);
-        } else {
+  
+        if (!response.ok) {
           console.error('Ошибка загрузки данных');
+          return;
         }
+  
+        const data = await response.json();
+        setDebtors(data);
       } catch (error) {
         console.error('Ошибка при загрузке пользователей', error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
-  }, [searchTerm, period, debtStatus]);
-
+  }, [searchTerm, period, debtStatus, accessToken]);
+  
 
   const handleFileUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
@@ -120,6 +125,41 @@ export default function AbonentyPage() {
       alert("Ошибка при загрузке файла");
     }
   };
+
+  const sortedDebtors = [...debtors].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+  
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+  
+    if (aValue === null || aValue === undefined) return 1;
+    if (bValue === null || bValue === undefined) return -1;
+  
+    if (typeof aValue === 'string') {
+      return sortConfig.direction === 'asc'
+        ? aValue.localeCompare(bValue)
+        : bValue.localeCompare(aValue);
+    }
+  
+    if (typeof aValue === 'number' || !isNaN(Date.parse(aValue))) {
+      const valA = new Date(aValue).toString() !== 'Invalid Date' ? new Date(aValue) : parseFloat(aValue);
+      const valB = new Date(bValue).toString() !== 'Invalid Date' ? new Date(bValue) : parseFloat(bValue);
+  
+      return sortConfig.direction === 'asc' ? valA - valB : valB - valA;
+    }
+  
+    return 0;
+  });
+
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+  
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -191,13 +231,16 @@ export default function AbonentyPage() {
                 <tr className="text-muted-foreground">
                   <th className="p-3">Имя</th>
                   <th className="p-3">Адрес</th>
-                  <th className="p-3">Дата последнего платежа</th>
-                  <th className="p-3">Сумма</th>
-                  <th className="p-3">ИИН</th>
+                  <th className="p-3 cursor-pointer" onClick={() => handleSort('last_payment')} >Дата последнего платежа {sortConfig.key === 'last_payment' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                  </th>
+                  <th className="p-3 cursor-pointer" onClick={() => handleSort('current_debt')} >Сумма {sortConfig.key === 'current_debt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                  </th>
+                  <th className="p-3 cursor-pointer" onClick={() => handleSort('iin')} >ИИН {sortConfig.key === 'iin' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {debtors.map((debtor, index) => (
+                {sortedDebtors.map((debtor, index) => (
                   <tr key={index} className="border-t bg-white hover:bg-gray-50">
                     <td className="p-3 font-medium">{debtor.full_name}</td>
                     <td className="p-3">{debtor.address}</td>

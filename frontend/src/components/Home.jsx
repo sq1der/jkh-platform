@@ -30,7 +30,7 @@ const Home = () => {
     setLoading(true);
     try {
       // Отправляем запрос на сервер для проверки задолженности
-      const response = await axios.get(`http://localhost:8000/api/debtcheck/${iin}`);
+      const response = await axios.get(`http://localhost:8000/api/debt/${iin}/`);
       
       // Если данные получены, перенаправляем на страницу с результатами
       if (response.data) {

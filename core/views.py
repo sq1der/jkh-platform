@@ -52,6 +52,10 @@ class DebtorViewSet(viewsets.ModelViewSet):
         to_date = params.get('to_date')
         if from_date and to_date:
             queryset = queryset.filter(last_payment__range=[from_date, to_date])
+        elif from_date:
+            queryset = queryset.filter(last_payment__gte=from_date)
+        elif to_date:
+            queryset = queryset.filter(last_payment__lte=to_date)
 
         overdue_days = params.get('overdue_days')
         if overdue_days:
