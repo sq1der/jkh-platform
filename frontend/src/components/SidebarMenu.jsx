@@ -57,7 +57,7 @@ const SidebarMenu = () => {
             СТРУКТУРА ОРГАНИЗАЦИИ
           </button>
           <button
-            onClick={() => { navigate('/projects'); setMenuOpen(false); }}
+            onClick={() => { navigate('/compl'); setMenuOpen(false); }}
             className="text-left"
             
           >

@@ -10,6 +10,7 @@ import OrganizationStructure from './components/OrganizationStructure';
 import ReportsPage from './components/ReportPage';
 import ActivityPage from './components/ActivityPage';
 import Completed from './components/Completed';
+import ProjectPage from './components/ProjectPage';
 const App = () => {
   return (
     <Router>
@@ -25,6 +26,8 @@ const App = () => {
         <Route path="/report" element={<ReportsPage/>} />
         <Route path="/activity" element={<ActivityPage/>} />
         <Route path="/compl" element={<Completed/>} />
+        <Route path="/project" element={<ProjectPage/>} />
+        
       </Routes>
     </Router>
   );
