@@ -92,6 +92,7 @@ const DebtInfoPage = () => {
         </div>
       </footer>
     </div>
+    
   );
 };
 

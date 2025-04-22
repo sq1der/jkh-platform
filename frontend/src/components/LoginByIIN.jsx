@@ -69,7 +69,7 @@ const LoginByIIN = () => {
           >
             {loading ? 'Загрузка...' : 'Войти'}
           </button>
-          <button className="w-full border border-black text-black py-2 rounded-lg" >
+          <button className="w-full border border-black text-black py-2 rounded-lg" onClick={() => navigate('/login')} >
             Войти по email
           </button>
         </div>

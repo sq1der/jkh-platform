@@ -160,7 +160,7 @@ const Home = () => {
           </button>
           <button
             className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
-            onClick={() => navigate('/projects')}
+            onClick={() => navigate('/compl')}
           >
             Завершенные объекты
           </button>
