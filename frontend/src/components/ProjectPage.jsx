@@ -4,26 +4,51 @@ import SidebarMenu from '../components/SidebarMenu';
 import axios from 'axios';
 
 const ProjectPage = () => {
-  const { id } = useParams(); // Получаем id проекта из URL
+  const { id } = useParams();
   const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true); // Новый стейт для загрузки
+  const [error, setError] = useState(null);     // Новый стейт для ошибок
 
   useEffect(() => {
     const fetchProject = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        const res = await axios.get(`/api/projects/${id}`);
+        const res = await axios.get(`/api/projects/${id}/`); // Обрати внимание: слэш в конце!
+        console.log('Ответ от API:', res.data); // отладка
         setProject(res.data);
       } catch (err) {
         console.error('Ошибка при загрузке проекта:', err);
+        setError('Не удалось загрузить проект. Попробуйте позже.');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProject();
+    if (id) fetchProject();
   }, [id]);
+
+  if (loading) {
+    return (
+      <div className="text-center p-10 text-lg font-semibold text-gray-500">
+        Загрузка проекта...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center p-10 text-lg font-semibold text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   if (!project) {
     return (
       <div className="text-center p-10 text-lg font-semibold text-gray-500">
-        Загрузка проекта...
+        Проект не найден.
       </div>
     );
   }
@@ -49,35 +74,39 @@ const ProjectPage = () => {
         />
       </section>
 
-      <section className="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        {project.gallery?.map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt={`Фото ${index + 1}`}
-            className="w-full h-64 object-cover rounded-xl shadow"
-          />
-        ))}
-      </section>
+      {project.gallery?.length > 0 && (
+        <section className="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          {project.gallery.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Фото ${index + 1}`}
+              className="w-full h-64 object-cover rounded-xl shadow"
+            />
+          ))}
+        </section>
+      )}
 
-      <section className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
-        <div className="col-span-2 bg-white rounded-2xl overflow-hidden shadow">
-          <iframe
-            title="Карта проекта"
-            src={project.mapUrl}
-            className="w-full h-[500px]"
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-        <div className="bg-white rounded-xl border p-6 shadow h-full">
-          <h2 className="font-semibold text-lg mb-4">Выполненные работы</h2>
-          <p className="text-sm mb-3">{project.workDone}</p>
-          <p className="text-sm font-semibold mt-2">Местоположение:</p>
-          <p className="text-sm">{project.location}</p>
-        </div>
-      </section>
+      {project.mapUrl && (
+        <section className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
+          <div className="col-span-2 bg-white rounded-2xl overflow-hidden shadow">
+            <iframe
+              title="Карта проекта"
+              src={project.mapUrl}
+              className="w-full h-[500px]"
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          <div className="bg-white rounded-xl border p-6 shadow h-full">
+            <h2 className="font-semibold text-lg mb-4">Выполненные работы</h2>
+            <p className="text-sm mb-3">{project.workDone}</p>
+            <p className="text-sm font-semibold mt-2">Местоположение:</p>
+            <p className="text-sm">{project.location}</p>
+          </div>
+        </section>
+      )}
 
       <footer className="bg-[#303030] text-white p-6 mt-12 text-sm">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 text-center md:text-left">
