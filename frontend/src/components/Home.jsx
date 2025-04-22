@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SidebarMenu from '../components/SidebarMenu';
+import Footer from './Footer';
 
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
 
@@ -30,7 +31,7 @@ const Home = () => {
     setLoading(true);
     try {
       // Отправляем запрос на сервер для проверки задолженности
-      const response = await axios.get(`http://localhost:8000/api/debt/${iin}/`);
+      const response = await axios.get(``);
       
       // Если данные получены, перенаправляем на страницу с результатами
       if (response.data) {
@@ -76,6 +77,7 @@ const Home = () => {
     <div className="min-h-screen flex flex-col bg-[#121212] text-black relative">
     {/* Меню бар */}
     <SidebarMenu />
+    
       
 
       {/* Хедер */}
@@ -121,13 +123,6 @@ const Home = () => {
               ))}
             </div>
           </div>
-
-
-
-
-
-
-
         </div>
       </header>
 
@@ -160,7 +155,7 @@ const Home = () => {
           </button>
           <button
             className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
-            onClick={() => navigate('/compl')}
+            onClick={() => navigate('/projects')}
           >
             Завершенные объекты
           </button>
@@ -236,25 +231,8 @@ const Home = () => {
             </GoogleMap>
             </div>
       </section>
-
       {/* Футер */}
-      <footer className="bg-black text-white px-6 py-8 text-sm">
-        <div className="flex flex-col md:flex-row justify-between gap-6">
-          <div>
-            <h3 className="font-semibold mb-2">Контакты</h3>
-            <p>Время работы: 09:00–18:00</p>
-            <p>Телефон: +7 (7182) 32–22–30</p>
-            <p>Телефон: +7 (7182) 32–22–60</p>
-          </div>
-          <div>
-            <p>Отдел бухгалтерии</p>
-            <p>Приемная</p>
-          </div>
-          <div>
-            <p>Адрес: ул. Кривенко 25</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

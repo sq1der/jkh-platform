@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 const SidebarMenu = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -8,11 +8,32 @@ const SidebarMenu = () => {
   const sidebarRef = useRef(null);
   const location = useLocation();
 
-  // Функция для получения цвета иконки в зависимости от маршрута
   const getIconColor = () => {
     const activePaths = ['/', '/organization', '/activity', '/debtcheck'];
     return activePaths.includes(location.pathname) ? 'text-white' : 'text-black';
   };
+
+  // Закрытие при клике вне меню
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -27,19 +48,22 @@ const SidebarMenu = () => {
 
       <div
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full w-80 bg-[#1E1E1E] text-white z-40 px-6 py-10 transition-transform duration-300 ${
-          menuOpen ? 'translate-x-0' : '-translate-x-full'
+         className={`fixed top-0 left-0 h-[1434px] w-[400px] bg-[#1E1E1E] text-white z-40 px-10 py-14 transition-transform duration-300 ${
+    menuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <button className="mb-8" onClick={() => setMenuOpen(false)}>
-          <X size={32} className="text-white" />
-        </button>
-
-        <h2 className="text-[16px] font-bold leading-tight uppercase tracking-wide mb-10">
+        <h1
+          onClick={() => {
+            navigate('/');
+            console.log('Клик по заголовку Комитет Модернизации Жилья');
+            setMenuOpen(false);
+          }}
+          className="text-[20px] font-extrabold leading-tight uppercase tracking-wide mb-12 text-left cursor-pointer select-none"
+        >
           КОМИТЕТ <br /> МОДЕРНИЗАЦИИ ЖИЛЬЯ
-        </h2>
+        </h1>
 
-        <nav className="flex flex-col gap-6 text-[13px] font-medium leading-snug">
+        <nav className="flex flex-col gap-8 text-[16px] font-bold leading-snug tracking-wide uppercase">
           <button
             onClick={() => {
               navigate('/activity');

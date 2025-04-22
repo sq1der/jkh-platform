@@ -1,5 +1,6 @@
 import React from "react";
 import SidebarMenu from '../components/SidebarMenu';
+import Footer from './Footer';
 export default function ActivityPage() {
   return (
     <div className="text-black">
@@ -135,31 +136,8 @@ export default function ActivityPage() {
             </div>
         </div>
       </section>
-
-
-
-      {/* Подвал */}
-      <footer className="bg-[#000000CC] text-white py-10 px-6 md:px-16 text-sm">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <p className="font-semibold mb-2">Контакты</p>
-            <p>Время работы: 09:00–18:00</p>
-          </div>
-          <div>
-            <p className="font-semibold mb-2">Телефон</p>
-            <p>+7 (7182) 32-22-30</p>
-            <p>+7 (7182) 32-22-60</p>
-          </div>
-          <div>
-            <p className="text-gray-400">Отдел бухгалтерии</p>
-            <p className="text-gray-400">Приемная</p>
-          </div>
-          <div>
-            <p className="font-semibold">Адрес:</p>
-            <p>ул. Кривенко 25</p>
-          </div>
-        </div>
-      </footer>
+      {/* Футер */}
+      <Footer />
     </div>
   );
 }
