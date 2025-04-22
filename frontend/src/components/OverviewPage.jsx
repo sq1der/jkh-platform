@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Pie } from 'react-chartjs-2';
 import { Chart } from 'chart.js';
 import 'chart.js/auto';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
 import ChartDataLabels from 'chartjs-plugin-datalabels';  
@@ -21,6 +21,7 @@ export default function Overview() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [period, setPeriod] = useState("all");
   const [peopleFilter, setPeopleFilter] = useState("all");
+  const [districtStats, setDistrictStats] = useState({});
 
   const fileInputRef = useRef(null);
   const accessToken = localStorage.getItem('accessToken');
@@ -59,6 +60,14 @@ export default function Overview() {
         });
 
         setBuildings(parsed);
+
+        // Расчёт распределения по районам
+        const districtCount = {};
+        parsed.forEach(building => {
+          const district = building.district || "Неизвестно";
+          districtCount[district] = (districtCount[district] || 0) + 1;
+        });
+        setDistrictStats(districtCount);
       } catch (err) {
         console.error('Ошибка загрузки зданий:', err);
       }
@@ -70,11 +79,9 @@ export default function Overview() {
   const handleFileUpload = async () => {
     const file = fileInputRef.current?.files?.[0];
     if (!file) return;
-  
     const token = localStorage.getItem('accessToken');
     const formData = new FormData();
     formData.append('file', file);
-  
     try {
       const res = await axios.post(
         'http://localhost:8000/upload/',
@@ -96,12 +103,23 @@ export default function Overview() {
   };
 
   const pieChartData = {
-    labels: ['Баянаульский район', 'Железинский район', 'Иртышский район', 'Теренкольский район' ],
+    labels: Object.keys(districtStats),
     datasets: [
       {
         label: 'Количество объектов',
-        data: [32, 24, 20, 15],
-        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#800080'],
+        data: Object.values(districtStats),
+        backgroundColor: [
+          '#3B82F6',
+          '#10B981',
+          '#F59E0B',
+          '#800080',
+          '#EF4444',
+          '#6366F1',
+          '#14B8A6',
+          '#F43F5E',
+          '#A855F7',
+          '#6EE7B7',
+        ],
       },
     ],
   };
@@ -112,12 +130,12 @@ export default function Overview() {
         formatter: (value, ctx) => {
           const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
           const percentage = ((value / total) * 100).toFixed(2);
-          return `${percentage}%`;  
+          return `${percentage}%`;
         },
-        color: 'white',  
+        color: 'white',
         font: {
-          weight: 'bold',  
-          size: 14,  
+          weight: 'bold',
+          size: 14,
         },
       },
     },
@@ -125,13 +143,10 @@ export default function Overview() {
     maintainAspectRatio: false,
   };
 
-
-
   if (!isLoaded) return <div>Загрузка карты...</div>;
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Сайдбар */}
       <aside className="w-64 bg-white shadow-lg flex flex-col justify-between">
         <div>
           <div className="text-3xl font-bold p-6 border-b border-gray-200">
@@ -156,28 +171,25 @@ export default function Overview() {
       </aside>
 
       <main className="flex-1 p-6">
-      <h2 className="text-2xl font-semibold mb-6">Обзор</h2>
-        {/* Фильтры */}
+        <h2 className="text-2xl font-semibold mb-6">Обзор</h2>
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex gap-4">
-          <select value={period} onChange={e => setPeriod(e.target.value)} className="w-[400px] p-2 border rounded-2xl">
-            <option value="all">Период: Все время</option>
-            <option value="month">Последний месяц</option>
-          </select>
-          <select value={peopleFilter} onChange={e => setPeopleFilter(e.target.value)} className="w-[400px] h-[49px] p-2 border rounded-2xl">
-            <option value="all">Люди: Все</option>
-          </select>
-        </div>
+          <div className="flex gap-4">
+            <select value={period} onChange={e => setPeriod(e.target.value)} className="w-[400px] p-2 border rounded-2xl">
+              <option value="all">Период: Все время</option>
+              <option value="month">Последний месяц</option>
+            </select>
+            <select value={peopleFilter} onChange={e => setPeopleFilter(e.target.value)} className="w-[400px] h-[49px] p-2 border rounded-2xl">
+              <option value="all">Люди: Все</option>
+            </select>
+          </div>
           <button onClick={() => setIsModalOpen(true)} className="w-[250px] h-[49px] bg-black text-white px-4 py-2 rounded-2xl">Загрузить файл</button>
           <input type="file" ref={fileInputRef} className="hidden" />
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          {/* Левая колонка */}
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Статистика</h2>
 
-            {/* Карточки */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl shadow p-4 transition-opacity duration-500">
                 <div className="text-gray-500">Абоненты</div>
@@ -193,70 +205,65 @@ export default function Overview() {
               </div>
             </div>
 
-            {/* Диаграмма */}
             <div className="bg-white p-4 rounded-2xl shadow h-[700px]">
               <h3 className="font-semibold mb-2">Распределение по районам</h3>
               <Pie data={pieChartData} options={pieChartOptions} />
             </div>
           </div>
 
-          {/* Правая колонка — Карта */}
           <div className="space-y-6">
-          <h2 className="text-2xl font-semibold">Карта</h2>
-
-          
-          <div className="rounded-lg shadow overflow-hidden h-[810px]">
-            <GoogleMap
-              center={center}
-              zoom={13}
-              mapContainerStyle={{ width: '100%', height: '100%' }}
-            >
-              {buildings.map(b => (
-                <Marker
-                  key={b.id}
-                  position={{ lat: b.lat, lng: b.lng }}
-                  onClick={() => setSelectedBuilding(b)}
-                />
-              ))}
-
-              {selectedBuilding && (
-                <InfoWindow
-                position={{ lat: selectedBuilding.lat, lng: selectedBuilding.lng }}
-                onCloseClick={() => setSelectedBuilding(null)}
+            <h2 className="text-2xl font-semibold">Карта</h2>
+            <div className="rounded-lg shadow overflow-hidden h-[810px]">
+              <GoogleMap
+                center={center}
+                zoom={13}
+                mapContainerStyle={{ width: '100%', height: '100%' }}
               >
-                <div className="text-sm w-72 transition duration-300 animate-fade-in">
-                  <h3 className="font-bold mb-1">{selectedBuilding.address}</h3>
-                  <p>Жильцов: {selectedBuilding.total_residents}</p>
-                  <p>Должников: {selectedBuilding.total_debtors}</p>
-                  <p>Задолженность: {selectedBuilding.total_debt} ₸</p>
-            
-                  {selectedBuilding.debtors?.length > 0 && (
-                    <div className="mt-2">
-                      <p className="font-semibold">Должники:</p>
-                      <ul className="list-disc list-inside text-xs max-h-24 overflow-y-auto">
-                        {selectedBuilding.debtors.map((debtor, idx) => (
-                          <li key={idx}>{debtor.name} — {debtor.amount} ₸</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-            
-                  <Link
-                    to={`/abonents`}
-                    className="mt-3 inline-block bg-black text-white px-3 py-1 rounded text-xs hover:bg-gray-800"
+                {buildings.map(b => (
+                  <Marker
+                    key={b.id}
+                    position={{ lat: b.lat, lng: b.lng }}
+                    onClick={() => setSelectedBuilding(b)}
+                  />
+                ))}
+
+                {selectedBuilding && (
+                  <InfoWindow
+                    position={{ lat: selectedBuilding.lat, lng: selectedBuilding.lng }}
+                    onCloseClick={() => setSelectedBuilding(null)}
                   >
-                    Перейти к абонентам
-                  </Link>
-                </div>
-                </InfoWindow>
-              )}
-            </GoogleMap>
+                    <div className="text-sm w-72 transition duration-300 animate-fade-in">
+                      <h3 className="font-bold mb-1">{selectedBuilding.address}</h3>
+                      <p>Жильцов: {selectedBuilding.total_residents}</p>
+                      <p>Должников: {selectedBuilding.total_debtors}</p>
+                      <p>Задолженность: {selectedBuilding.total_debt} ₸</p>
+
+                      {selectedBuilding.debtors?.length > 0 && (
+                        <div className="mt-2">
+                          <p className="font-semibold">Должники:</p>
+                          <ul className="list-disc list-inside text-xs max-h-24 overflow-y-auto">
+                            {selectedBuilding.debtors.map((debtor, idx) => (
+                              <li key={idx}>{debtor.name} — {debtor.amount} ₸</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <Link
+                        to={`/abonents`}
+                        className="mt-3 inline-block bg-black text-white px-3 py-1 rounded text-xs hover:bg-gray-800"
+                      >
+                        Перейти к абонентам
+                      </Link>
+                    </div>
+                  </InfoWindow>
+                )}
+              </GoogleMap>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Модальное окно */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-xl shadow-lg">
@@ -296,4 +303,3 @@ export function SidebarItem({ icon, text, active }) {
     </div>
   );
 }
-
