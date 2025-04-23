@@ -84,7 +84,7 @@ const SidebarMenu = () => {
           </button>
           <button
             onClick={() => {
-              navigate('/compl');
+              navigate('/projects');
               setMenuOpen(false);
             }}
             className="text-left"

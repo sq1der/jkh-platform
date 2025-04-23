@@ -37,7 +37,9 @@ return (
       className="h-[350px] bg-cover bg-center relative flex flex-col justify-center items-center"
       style={{ backgroundImage: "url('/debt-header.jpg')" }}
     >
-      <div className="absolute inset-0 bg-black/60 z-0" />
+
+      <div className="absolute inset-0 bg-black opacity-75 z-0" />
+      
       <div className="relative z-10 text-center">
         <h1 className="text-white text-2xl md:text-3xl font-bold mb-6">
           ПРОСМОТР ЗАДОЛЖЕННОСТИ ПО ОБЪЕКТУ
@@ -62,9 +64,9 @@ return (
     </header>
 
     {/* Main content */}
-    <main className="flex-grow px-6 md:px-12 py-10 max-w-5xl mx-auto text-base">
+    <main className="flex-grow px-6 md:px-12 py-10 max-w-full text-base">
       {error && <p className="text-red-500 text-center">{error}</p>}
-
+    
       {data && (
         <div className="flex justify-start">
           <div className="space-y-6 w-full max-w-[500px]">
@@ -77,7 +79,7 @@ return (
                 Остаток срока: <span className="font-bold">{data.remaining_term}</span>
               </p>
             </div>
-
+      
             <div>
               <h3 className="text-lg font-bold mb-4">Информация об объекте</h3>
               <p><span className="font-bold">Тип объекта:</span> {data.object_type}</p>

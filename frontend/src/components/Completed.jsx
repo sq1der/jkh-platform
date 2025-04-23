@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SidebarMenu from '../components/SidebarMenu';
 import axios from 'axios';
 import Footer from './Footer';
 
+
 const CompletedProjects = () => {
-  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('ru-RU', {
+      year: 'numeric',
+      month: 'long'
+    }).format(date);
+  };
+
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(''); // API запрос
+        const response = await axios.get('http://localhost:8000/api/buildings/'); // API запрос
         setProjects(response.data);
       } catch (error) {
         console.error('Ошибка при получении проектов:', error);
@@ -38,22 +48,25 @@ const CompletedProjects = () => {
               <div className="w-[476px] p-6 flex flex-col justify-between">
                 <div>
                   <h2 className="text-xl font-semibold mb-2 leading-snug">
-                    {project.title}
+                    {project.name}
                   </h2>
                   <p className="text-sm font-semibold">
                     Срок реализации:{' '}
-                    <span className="font-normal">{project.period}</span>
+                    <span className="font-normal">
+                      {formatDate(project.start_date)} — {formatDate(project.end_date)}
+                    </span>
                   </p>
                   <p className="text-sm mt-2 text-gray-700 line-clamp-5">
                     {project.description}
                   </p>
                 </div>
-                <button
-                  onClick={() => navigate(`/project/${project._id}`)}
-                  className="mt-4 w-[130px] bg-[#00B2FF] text-white text-sm py-2 rounded hover:bg-[#009BDB] transition"
+                <Link
+                  to={`/projects/${project.id}`}
+                  className="text-blue-600 hover:underline font-medium"
                 >
-                  Подробнее
-                </button>
+                  подробно
+                </Link>
+
               </div>
               <img
                 src={project.image}
@@ -64,9 +77,9 @@ const CompletedProjects = () => {
           ))}
         </div>
       </div>
+
       {/* Footer */}
       <Footer />
-      
     </div>
   );
 };

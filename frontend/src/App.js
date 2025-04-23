@@ -9,7 +9,7 @@ import DebtCheckPage from './components/DebtCheckPage';
 import OrganizationStructure from './components/OrganizationStructure';
 import ReportsPage from './components/ReportPage';
 import ActivityPage from './components/ActivityPage';
-import Completed from './components/Completed';
+import Projects from './components/Completed';
 import ProjectPage from './components/ProjectPage';
 const App = () => {
   return (
@@ -25,9 +25,8 @@ const App = () => {
         <Route path="/organization" element={<OrganizationStructure/>} />
         <Route path="/report" element={<ReportsPage/>} />
         <Route path="/activity" element={<ActivityPage/>} />
-        <Route path="/compl" element={<Completed/>} />
-        <Route path="/project" element={<ProjectPage/>} />
-        
+        <Route path="/projects" element={<Projects/>} />
+        <Route path="/projects/:id" element={<ProjectPage />} />
       </Routes>
     </Router>
   );
