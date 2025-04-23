@@ -5,6 +5,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
+from .models import PasswordResetToken
+from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
+
 
 from django.utils import timezone
 from datetime import timedelta
@@ -162,3 +170,61 @@ class ExcelUploadView(APIView):
                 'message': 'Обработка завершена с ошибками',
                 'errors': upload.error_log
             }, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class PasswordResetRequestView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PasswordResetRequestSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"]
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"detail": "Письмо отправлено, если такой email существует."},
+                            status=status.HTTP_200_OK)
+
+        reset = PasswordResetToken.objects.create(user=user)
+
+        reset_link = f"{settings.FRONTEND_URL}/reset-password/{reset.token}/"
+        html = render_to_string("emails/password_reset.html", {"link": reset_link, "user": user})
+        send_mail(
+            subject="Сброс пароля ЖКХ‑портал",
+            message=f"Перейдите по ссылке для сброса пароля: {reset_link}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            html_message=html
+        )
+        return Response({"detail": "Письмо отправлено."}, status=status.HTTP_200_OK)
+
+
+class PasswordResetConfirmView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PasswordResetConfirmSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            reset = PasswordResetToken.objects.select_related("user").get(token=serializer.validated_data["token"])
+        except PasswordResetToken.DoesNotExist:
+            return Response({"detail": "Неверный токен."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if reset.is_expired:
+            reset.delete()
+            return Response({"detail": "Токен истёк."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = reset.user
+        user.set_password(serializer.validated_data["new_password"])
+        user.save()
+        reset.delete()
+
+        # по желанию: сразу выдать JWT
+        tokens = get_tokens_for_user(user)
+        return Response({"detail": "Пароль обновлён.",
+                         "access": tokens["access"],
+                         "refresh": tokens["refresh"]}, status=status.HTTP_200_OK)

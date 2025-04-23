@@ -3,3 +3,4 @@ from .building import Building
 from .debtor import Debtor
 from .payment import Payment
 from .excel_upload import ExcelUpload
+from .password_reset import PasswordResetToken

@@ -152,6 +152,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -166,3 +167,11 @@ SESSION_COOKIE_AGE = 3600
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH', '/opt/homebrew/opt/gdal/lib/libgdal.dylib')
 GEOS_LIBRARY_PATH="/opt/homebrew/lib/libgeos_c.dylib"
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "you@gmail.com"
+EMAIL_HOST_PASSWORD = "app-specific-password"
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = "ЖКХ портал <noreply@gkh.kz>"
+FRONTEND_URL = "http://localhost:3000"  # для формирования ссылки

@@ -52,3 +52,10 @@ class LoginWithIINSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise serializers.ValidationError("Пользователь с таким ИИН не найден")
         return {'user': user}
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    token = serializers.UUIDField()
+    new_password = serializers.CharField(min_length=8, write_only=True)

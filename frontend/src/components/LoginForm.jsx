@@ -85,7 +85,8 @@ const LoginForm = () => {
             </button>
           </div>
 
-          <div className="text-right text-xs text-gray-600 cursor-pointer hover:underline">
+          <div className="text-right text-xs text-gray-600 cursor-pointer hover:underline"
+          onClick={() => navigate('/forgot-password')}>
             сброс пароля
           </div>
         </div>
