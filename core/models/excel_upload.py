@@ -19,7 +19,7 @@ class ExcelUpload(models.Model):
     error_log = models.JSONField(default=dict, blank=True, null=True)
     
     def __str__(self):
-        return f"Upload {self.file_name} by {self.uploaded_by}"
+        return f"Upload {self.file_name} by {self.self.user}"
 
     class Meta:
         ordering = ['-uploaded_at'] 

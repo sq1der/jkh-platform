@@ -20,7 +20,7 @@ const Home = () => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
 
   const { isLoaded } = useJsApiLoader({
-      googleMapsApiKey: "AIzaSyCcedIxvffvLDKZM3mFjDBhV6ow8UplfOc",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
   const handleCheckDebt = async () => {
     if (!iin) {

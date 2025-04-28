@@ -27,8 +27,11 @@ export default function Overview() {
   const accessToken = localStorage.getItem('accessToken');
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCcedIxvffvLDKZM3mFjDBhV6ow8UplfOc",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
+  
+  console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+
 
   useEffect(() => {
     const fetchAdmin = async () => {

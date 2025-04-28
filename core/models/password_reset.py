@@ -14,4 +14,4 @@ class PasswordResetToken(models.Model):
         return self.created_at < timezone.now() - timedelta(hours=1)
         
     def __str__(self):
-        return f"{self.user.email} – {self.token}"
+        return f"{self.user.email if self.user else 'Unknown'} – {self.token}"

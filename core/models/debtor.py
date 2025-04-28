@@ -13,7 +13,7 @@ class Debtor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
     full_name = models.CharField(max_length=255)  
     iin = models.CharField(max_length=12, unique=True)  
-    personal_account = models.CharField(max_length=50)  
+    personal_account = models.CharField(max_length=50, unique=True)  
     address = models.TextField()  
     status = models.CharField(
         max_length=15,
