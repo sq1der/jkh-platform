@@ -1,9 +1,5 @@
 services:
   - type: web
     name: jkh-platform
-    env: python
-    buildCommand: |
-      apt-get update
-      apt-get install -y gdal-bin libgdal-dev binutils libproj-dev
-      pip install -r requirements.txt
-    startCommand: gunicorn backend.wsgi:application 0.0.0.0:$PORT
+    env: docker
+    dockerfilePath: ./Dockerfile
