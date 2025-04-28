@@ -5,7 +5,6 @@ description = ""
 authors = [
     {name = "sq1der",email = "amanbelgibay@gmail.com"}
 ]
-readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "asgiref==3.8.1",
