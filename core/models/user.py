@@ -26,7 +26,7 @@ class User(AbstractUser, PermissionsMixin):
     username = None 
 
     email = models.EmailField(unique=True)
-    iin = models.CharField(max_length=12, unique=True)  
+    iin = models.CharField(max_length=12, unique=True, db_index=True)  
     full_name = models.CharField(max_length=255)
     role = models.CharField(max_length=10, choices=Role.choices, default=Role.VIEWER)
 

@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny
 from .models import PasswordResetToken
 from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 
+from django.http import JsonResponse
 
 from django.utils import timezone
 from datetime import timedelta
@@ -228,3 +229,51 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         return Response({"detail": "Пароль обновлён.",
                          "access": tokens["access"],
                          "refresh": tokens["refresh"]}, status=status.HTTP_200_OK)
+    
+
+def get_debt_info(request):
+    iin = request.GET.get('iin')
+
+    if not iin:
+        return JsonResponse({'error': 'ИИН обязателен.'}, status=400)
+
+    try:
+        debtor = Debtor.objects.get(iin=iin)
+    except Debtor.DoesNotExist:
+        return JsonResponse({'error': 'Должник не найден.'}, status=404)
+
+    # Если у тебя есть связь Debtor -> Building
+    building = debtor.building
+
+    # Расчёт остатка срока
+    remaining_term_days = debtor.remaining_term_days
+    if remaining_term_days is not None:
+        years = remaining_term_days // 365
+        months = (remaining_term_days % 365) // 30
+        remaining_days = (remaining_term_days % 365) % 30
+
+        parts = []
+        if years:
+            parts.append(f"{years} год{'а' if 1 < years < 5 else ''}")
+        if months:
+            parts.append(f"{months} мес")
+        if remaining_days:
+            parts.append(f"{remaining_days} дн.")
+
+        remaining_term_display = " ".join(parts) or "0 дней"
+    else:
+        remaining_term_display = "Неизвестно"
+
+    response_data = {
+        'address': debtor.address,
+        'current_debt': debtor.current_debt,
+        'remaining_term': remaining_term_display,
+        'object_type': building.object_type,
+        'build_year': building.year_built,
+        'house_type': building.building_type,
+        'total_residents': building.total_residents,
+        'apartments_count': building.number_of_apartments,
+    }
+
+    return JsonResponse(response_data)
+

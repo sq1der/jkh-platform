@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView, PasswordResetRequestView, PasswordResetConfirmView
+from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView, PasswordResetRequestView, PasswordResetConfirmView, get_debt_info
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -24,5 +24,6 @@ urlpatterns = [
     path('upload/', ExcelUploadView.as_view(), name='upload-excel'),
     path('password-reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('password-reset/confirm/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
+    path('api/debt-info/', get_debt_info, name='get_debt_info'),
 
 ]

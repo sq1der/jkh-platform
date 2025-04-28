@@ -24,6 +24,10 @@ class Building(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    object_type = models.CharField(max_length=255)
+    year_built = models.IntegerField()             
+    building_type = models.CharField(max_length=255) 
+    number_of_apartments = models.IntegerField()     
 
     def __str__(self):
         return f"Building {self.address}"
