@@ -10,17 +10,14 @@ RUN apt-get update && apt-get install -y \
     libproj-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Проверим версию GDAL
+# Проверим, какие версии GDAL установлены
 RUN gdal-config --version
+RUN find /usr/lib -name "libgdal.so*"
 
-# Получим путь к libgdal.so
-RUN echo $(gdal-config --libs)
-
-# Установка переменных окружения
+# Установка переменных окружения вручную
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
-ENV GDAL_VERSION=$(gdal-config --version)
-ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so.${GDAL_VERSION}
+ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
 
 # Установка зависимостей проекта
 WORKDIR /app
