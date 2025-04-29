@@ -13,11 +13,14 @@ RUN apt-get update && apt-get install -y \
 # Проверим, какие версии GDAL установлены
 RUN gdal-config --version
 RUN find /usr/lib -name "libgdal.so*"
+RUN find / -name "libgdal.so*" 2>/dev/null
+RUN echo "GDAL LIBS:" && find / -name "libgdal.so*" 2>/dev/null
+
 
 # Установка переменных окружения вручную
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
-ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
+ENV GDAL_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu/libgdal.so
 
 # Установка зависимостей проекта
 WORKDIR /app
