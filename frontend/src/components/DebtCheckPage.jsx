@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SidebarMenu from '../components/SidebarMenu';
 import Footer from './Footer';
@@ -6,8 +6,17 @@ import Footer from './Footer';
 function DebtInfoPage() {
   const [iin, setIin] = useState('');
   const [data, setData] = useState(null);
+  const [debtInfo, setDebtInfo] = useState(location.state?.debtInfo || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Если данные уже переданы через navigate, не нужно запрашивать их снова
+    if (!debtInfo && iin) {
+      handleSearch(); // Запросить данные, если их нет
+    }
+  }, [iin, debtInfo]);
+
 
   const handleSearch = async () => {
     if (!iin.trim()) {
@@ -20,11 +29,11 @@ function DebtInfoPage() {
     setData(null);
 
     try {
-      const response = await axios.get(`https://jkh-platform.onrender.com/api/debt-info/`, {
+      const response = await axios.get('https://jkh-platform.onrender.com/api/debt-info/', {
         params: { iin }
       });
 
-      setData(response.data);
+      setDebtInfo(response.data);
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error || 'Ошибка при получении данных.');
@@ -35,6 +44,7 @@ function DebtInfoPage() {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-white font-sans text-black">

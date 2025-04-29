@@ -27,12 +27,12 @@ const Home = () => {
       alert("Пожалуйста, введите ваш ИИН.");
       return;
     }
-    
+
     setLoading(true);
     try {
       // Отправляем запрос на сервер для проверки задолженности
-      const response = await axios.get(``);
-      
+      const response = await axios.get(`https://jkh-platform.onrender.com/api/debt-info/`, { params: { iin } });
+
       // Если данные получены, перенаправляем на страницу с результатами
       if (response.data) {
         navigate('/debtcheck', { state: { debtInfo: response.data } });
@@ -46,6 +46,7 @@ const Home = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     const fetchBuildings = async () => {
