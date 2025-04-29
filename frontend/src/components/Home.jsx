@@ -50,7 +50,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/buildings/', {
+        const res = await axios.get('https://jkh-platform.onrender.com/api/buildings/', {
         });
 
         const parsed = res.data.map(item => {

@@ -5,8 +5,6 @@ import axios from 'axios';
 import Footer from './Footer';
 
 
-
-
 const CompletedProjects = () => {
   const [projects, setProjects] = useState([]);
 
@@ -23,7 +21,7 @@ const CompletedProjects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/buildings/'); // API запрос
+        const response = await axios.get('https://jkh-platform.onrender.com/api/buildings/');
         setProjects(response.data);
       } catch (error) {
         console.error('Ошибка при получении проектов:', error);

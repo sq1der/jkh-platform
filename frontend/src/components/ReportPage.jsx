@@ -24,7 +24,7 @@ export default function ReportsPage() {
     
       try {
         const res = await axios.post(
-          'http://localhost:8000/upload/',
+          'https://jkh-platform.onrender.com/upload/',
           formData,
           {
             headers: {
@@ -47,7 +47,7 @@ export default function ReportsPage() {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
       const decoded = jwtDecode(token);
-      const res = await axios.get(`http://localhost:8000/api/users/${decoded.user_id}/`, {
+      const res = await axios.get(`https://jkh-platform.onrender.com/api/users/${decoded.user_id}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAdminName(res.data.full_name);

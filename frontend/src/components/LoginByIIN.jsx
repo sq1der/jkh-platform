@@ -13,7 +13,7 @@ const LoginByIIN = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/login/iin/', {
+      const response = await fetch('https://jkh-platform.onrender.com/login/iin/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ iin }),

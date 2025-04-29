@@ -29,8 +29,6 @@ export default function Overview() {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
-  
-  console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
 
 
   useEffect(() => {
@@ -38,7 +36,7 @@ export default function Overview() {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
       const decoded = jwtDecode(token);
-      const res = await axios.get(`http://localhost:8000/api/users/${decoded.user_id}/`, {
+      const res = await axios.get(`https://jkh-platform.onrender.com/api/users/${decoded.user_id}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAdminName(res.data.full_name);
@@ -49,7 +47,7 @@ export default function Overview() {
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/buildings/', {
+        const res = await axios.get('https://jkh-platform.onrender.com/api/buildings/', {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
 
@@ -87,7 +85,7 @@ export default function Overview() {
     formData.append('file', file);
     try {
       const res = await axios.post(
-        'http://localhost:8000/upload/',
+        'https://jkh-platform.onrender.com/upload/',
         formData,
         {
           headers: {

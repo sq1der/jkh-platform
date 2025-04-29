@@ -20,7 +20,7 @@ function DebtInfoPage() {
     setData(null);
 
     try {
-      const response = await axios.get(`http://localhost:8000/api/debt-info/`, {
+      const response = await axios.get(`https://jkh-platform.onrender.com/api/debt-info/`, {
         params: { iin }
       });
 
