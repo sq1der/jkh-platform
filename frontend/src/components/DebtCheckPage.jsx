@@ -7,7 +7,6 @@ import Footer from './Footer';
 function DebtInfoPage() {
   const location = useLocation();
   const [iin, setIin] = useState('');
-  const [data, setData] = useState(null);
   const [debtInfo, setDebtInfo] = useState(location.state?.debtInfo || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -69,6 +68,9 @@ function DebtInfoPage() {
               type="text"
               value={iin}
               onChange={(e) => setIin(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSearch();
+              }}            
               placeholder="Введите ваш ИИН"
               className="w-[680px] h-[50px] px-4 text-base rounded-[20px] placeholder:text-gray-500 shadow-md"
             />
@@ -87,26 +89,26 @@ function DebtInfoPage() {
       <main className="flex-grow px-6 md:px-12 py-10 max-w-full text-base">
         {error && <p className="text-red-500 text-center">{error}</p>}
 
-        {data && (
+        {debtInfo && (
           <div className="flex justify-start">
             <div className="space-y-6 w-full max-w-[500px]">
               <div>
-                <h2 className="text-lg font-bold mb-2">{data.address}</h2>
+                <h2 className="text-lg font-bold mb-2">{debtInfo.address}</h2>
                 <p className="mb-1">
-                  Сумма задолженности: <span className="font-bold">{data.current_debt} тенге</span>
+                  Сумма задолженности: <span className="font-bold">{debtInfo.current_debt} тенге</span>
                 </p>
                 <p>
-                  Остаток срока: <span className="font-bold">{data.remaining_term}</span>
+                  Остаток срока: <span className="font-bold">{debtInfo.remaining_term}</span>
                 </p>
               </div>
         
               <div>
                 <h3 className="text-lg font-bold mb-4">Информация об объекте</h3>
-                <p><span className="font-bold">Тип объекта:</span> {data.object_type}</p>
-                <p><span className="font-bold">Год постройки:</span> {data.build_year}</p>
-                <p><span className="font-bold">Тип дома:</span> {data.house_type}</p>
-                <p><span className="font-bold">Количество жильцов:</span> {data.total_residents}</p>
-                <p><span className="font-bold">Количество квартир:</span> {data.apartments_count}</p>
+                <p><span className="font-bold">Тип объекта:</span> {debtInfo.object_type}</p>
+                <p><span className="font-bold">Год постройки:</span> {debtInfo.build_year}</p>
+                <p><span className="font-bold">Тип дома:</span> {debtInfo.house_type}</p>
+                <p><span className="font-bold">Количество жильцов:</span> {debtInfo.total_residents}</p>
+                <p><span className="font-bold">Количество квартир:</span> {debtInfo.apartments_count}</p>
               </div>
             </div>
           </div>
