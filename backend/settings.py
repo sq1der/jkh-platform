@@ -168,7 +168,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 3600  
 
 GDAL_LIBRARY_PATH = os.getenv('GDAL_LIBRARY_PATH', '/opt/homebrew/opt/gdal/lib/libgdal.dylib')
-GEOS_LIBRARY_PATH="/opt/homebrew/lib/libgeos_c.dylib"
+GEOS_LIBRARY_PATH= os.getenv('GEOS_LIBRARY_PATH')
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
