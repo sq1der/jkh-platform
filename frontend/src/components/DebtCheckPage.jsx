@@ -27,7 +27,6 @@ function DebtInfoPage() {
 
     setLoading(true);
     setError('');
-    setData(null);
 
     try {
       const response = await axios.get('https://jkh-platform.onrender.com/api/debt-info/', {
