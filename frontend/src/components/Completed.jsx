@@ -5,6 +5,8 @@ import axios from 'axios';
 import Footer from './Footer';
 
 
+
+
 const CompletedProjects = () => {
   const [projects, setProjects] = useState([]);
 
