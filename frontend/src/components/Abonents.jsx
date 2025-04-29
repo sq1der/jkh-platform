@@ -6,6 +6,8 @@ import { FaChartBar, FaUsers, FaFileExcel, FaCog } from 'react-icons/fa';
 import { SidebarItem } from './OverviewPage';
 import axios from 'axios';
 
+
+
 export default function AbonentyPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [period, setPeriod] = useState("all");
@@ -18,7 +20,8 @@ export default function AbonentyPage() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   const accessToken = localStorage.getItem('accessToken');
-  
+  const API_URL = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     const fetchAdminData = async () => {
@@ -27,7 +30,7 @@ export default function AbonentyPage() {
         if (!token) return;
 
         const decoded = jwtDecode(token);
-        const response = await fetch(`http://localhost:8000/api/users/${decoded.user_id}/`, {
+        const response = await fetch(`${API_URL}/api/users/${decoded.user_id}/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -73,7 +76,7 @@ export default function AbonentyPage() {
   
         const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
   
-        const response = await fetch(`http://localhost:8000/api/debtors/${queryString}`, {
+        const response = await fetch(`${API_URL}/api/debtors/${queryString}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
@@ -108,7 +111,7 @@ export default function AbonentyPage() {
   
     try {
       const res = await axios.post(
-        'http://localhost:8000/upload/',
+        'https://jkh-platform.onrender.com/upload/',
         formData,
         {
           headers: {
