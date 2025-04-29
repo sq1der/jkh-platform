@@ -51,14 +51,11 @@ export default function Overview() {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
 
-        const parsed = res.data.map(item => {
-          const matches = item.location.match(/POINT \(([-\d.]+) ([-\d.]+)\)/);
-          return {
-            ...item,
-            lat: parseFloat(matches?.[2]),
-            lng: parseFloat(matches?.[1])
-          };
-        });
+        const parsed = res.data.map(item => ({
+          ...item,
+          lat: parseFloat(item.latitude),
+          lng: parseFloat(item.longitude)
+        }));
 
         setBuildings(parsed);
 
