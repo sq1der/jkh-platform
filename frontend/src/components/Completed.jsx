@@ -69,7 +69,7 @@ const CompletedProjects = () => {
 
               </div>
               <img
-                src={project.image}
+                src={project.image_url}
                 alt={project.title}
                 className="w-[204px] h-[408px] object-cover"
               />
