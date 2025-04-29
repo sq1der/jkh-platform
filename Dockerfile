@@ -10,8 +10,9 @@ ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
 
 WORKDIR /app
-COPY pyproject.toml poetry.lock ./
-RUN poetry config virtualenvs.create false && poetry lock && poetry install --no-interaction --no-ansi --no-root
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
 COPY . .
 
