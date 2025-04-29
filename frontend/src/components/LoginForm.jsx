@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiAlertTriangle } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
+
+const apiBaseUrl = process.env.REACT_APP_API_URL;
+
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,7 +18,7 @@ const LoginForm = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/login/email/', {
+      const response = await fetch('https://jkh-platform.onrender.com/login/email/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
