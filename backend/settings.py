@@ -174,7 +174,7 @@ EMAIL_HOST_USER = "you@gmail.com"
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "ЖКХ портал <noreply@gkh.kz>"
-FRONTEND_URL = "http://localhost:3000"  # для формирования ссылки
+FRONTEND_URL = "https://jkh-platform.vercel.app"  # для формирования ссылки
 
 PASSWORD_RESET_TIMEOUT = 3600  # Время жизни ссылки на сброс пароля — 1 час (3600 секунд)
 
