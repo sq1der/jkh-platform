@@ -26,11 +26,11 @@ const ProjectPage = () => {
       try {
         console.log(id);
         const res = await axios.get(`https://jkh-platform.onrender.com/api/buildings/${id}/`);
-        const matches = res.data.location?.match(/POINT \(([-\d.]+) ([-\d.]+)\)/);
-        const lat = matches ? parseFloat(matches[2]) : 0;
-        const lng = matches ? parseFloat(matches[1]) : 0;
+        const lat = parseFloat(res.data.latitude) || 0;
+        const lng = parseFloat(res.data.longitude) || 0;
 
         setProject({ ...res.data, lat, lng });
+
       } catch (err) {
         console.error('Ошибка при загрузке проекта:', err);
       }
