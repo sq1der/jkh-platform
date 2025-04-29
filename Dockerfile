@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
 # Установим переменную окружения для GDAL
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
 ENV C_INCLUDE_PATH=/usr/include/gdal
+ENV GDAL_LIBRARY_PATH=/usr/lib/libgdal.so
+
 
 # Установка зависимостей проекта
 WORKDIR /app
