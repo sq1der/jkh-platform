@@ -4,6 +4,7 @@ import SidebarMenu from '../components/SidebarMenu';
 import Footer from './Footer';
 
 function DebtInfoPage() {
+  const location = useLocation();
   const [iin, setIin] = useState('');
   const [data, setData] = useState(null);
   const [debtInfo, setDebtInfo] = useState(location.state?.debtInfo || null);
