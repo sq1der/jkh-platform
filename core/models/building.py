@@ -8,13 +8,14 @@ class Building(models.Model):
     street = models.CharField(max_length=255)
     district = models.CharField(max_length=255)
     
-    # Вместо PointField — два FloatField
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
     
     total_residents = models.IntegerField()
     total_debtors = models.IntegerField(default=0)
     total_debt = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_square = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    
     description = models.TextField()
     image_url = models.URLField(blank=True, null=True)
     start_date = models.DateField()

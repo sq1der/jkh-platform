@@ -5,15 +5,19 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view, permission_classes
 from django.core.mail import send_mail
+from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
 from django.conf import settings
+from django.http import FileResponse
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
-from .models import PasswordResetToken
-from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
+from .models import PasswordResetToken, ReportHistory
+from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer, ReportHistorySerializer
 
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from django.utils import timezone
 from datetime import timedelta
@@ -32,6 +36,7 @@ from .serializers import (
 )
 
 from .excel_parser import parse_excel_file
+from .reports.utils import generate_building_report
 
 
 User = get_user_model()
@@ -277,3 +282,36 @@ def get_debt_info(request):
 
     return JsonResponse(response_data)
 
+
+@csrf_exempt
+def download_building_report(request, building_id):
+    building = Building.objects.prefetch_related('debtors').get(id=building_id)
+    wb = generate_building_report(building)
+
+    now = timezone.now().strftime("%Y-%m-%d_%H-%M")
+    filename = f"{building.address.replace(' ', '_')}_{now}.xlsx"
+
+    from io import BytesIO
+    virtual_file = BytesIO()
+    wb.save(virtual_file)
+    virtual_file.seek(0)
+
+    report_history = ReportHistory(
+        building=building
+    )
+    report_history.file.save(filename, ContentFile(virtual_file.read()))
+    report_history.save()
+
+    virtual_file.seek(0) 
+    return FileResponse(virtual_file, as_attachment=True, filename=filename)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_report_history(request, building_id=None):
+    if building_id:
+        reports = ReportHistory.objects.filter(building_id=building_id).order_by('-created_at')
+    else:
+        reports = ReportHistory.objects.all().order_by('-created_at')
+
+    serializer = ReportHistorySerializer(reports, many=True, context={'request': request})
+    return Response(serializer.data)

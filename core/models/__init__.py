@@ -4,3 +4,4 @@ from .debtor import Debtor
 from .payment import Payment
 from .excel_upload import ExcelUpload
 from .password_reset import PasswordResetToken
+from .report_history import ReportHistory

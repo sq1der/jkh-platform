@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jkh-platform.onrender.com']
+ALLOWED_HOSTS = ['jkh-platform.onrender.com' , 'localhost']
 
 
 # Application definition
@@ -143,6 +143,11 @@ CORS_ALLOWED_ORIGINS = [
     "https://jkh-platform.vercel.app",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
@@ -178,3 +183,5 @@ FRONTEND_URL = "https://jkh-platform.vercel.app"  # для формирован�
 
 PASSWORD_RESET_TIMEOUT = 3600  # Время жизни ссылки на сброс пароля — 1 час (3600 секунд)
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

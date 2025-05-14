@@ -1,11 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
-from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView, PasswordResetRequestView, PasswordResetConfirmView, get_debt_info
+from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView, PasswordResetRequestView, PasswordResetConfirmView, get_debt_info, download_building_report, get_report_history
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
 
 router = DefaultRouter()
 router.register(r'debtors', views.DebtorViewSet)
@@ -25,5 +28,6 @@ urlpatterns = [
     path('password-reset/', PasswordResetRequestView.as_view(), name='password-reset-request'),
     path('password-reset/confirm/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
     path('api/debt-info/', get_debt_info, name='get_debt_info'),
-
-]
+    path("buildings/<uuid:building_id>/report/", download_building_report, name="download_report"),
+    path('buildings/reports/', get_report_history, name='report_history'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

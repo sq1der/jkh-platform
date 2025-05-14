@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 
-from .models import Debtor, Building, Payment, ExcelUpload
+from .models import Debtor, Building, Payment, ExcelUpload, ReportHistory
 
 
 User = get_user_model()
@@ -59,3 +59,8 @@ class PasswordResetRequestSerializer(serializers.Serializer):
 class PasswordResetConfirmSerializer(serializers.Serializer):
     token = serializers.UUIDField()
     new_password = serializers.CharField(min_length=8, write_only=True)
+
+class ReportHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportHistory
+        fields = ['id', 'building', 'file', 'created_at']

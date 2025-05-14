@@ -27,6 +27,9 @@ class Debtor(models.Model):
     debt_start_date = models.DateField(null=True, blank=True)  
     initial_term_days = models.IntegerField(null=True, blank=True) 
 
+    apartment_area = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) 
+    apart_num = models.CharField(max_length=10, verbose_name="Номер квартиры")
+
     @property
     def remaining_term_days(self):
         if self.debt_start_date and self.initial_term_days is not None:
@@ -54,7 +57,17 @@ class Debtor(models.Model):
             parts.append(f"{remaining_days} дн.")
 
         return " ".join(parts) or "0 дней"
+    
+    @property
+    def credit_amount(self):
+        if not self.building.total_square:
+            return 0.0
+        price_per_m2 = self.building.total_debt / self.building.total_square
+        return round(price_per_m2 * self.apartment_area, 2)
 
+    @property
+    def monthly_payment(self):
+        return round(self.credit_amount / 96, 2)
 
     def __str__(self):
         return f"Debtor {self.full_name} - {self.iin}"
