@@ -47,7 +47,7 @@ export default function ReportsPage() {
       if (!token) return alert("Необходима авторизация");
       try {
         const response = await axios.post(
-          `http://localhost:8000/buildings/${buildingId}/report/`,
+          `https://jkh-platform.onrender.com/buildings/${buildingId}/report/`,
           {},
           {
             responseType: 'blob', 
@@ -100,7 +100,7 @@ export default function ReportsPage() {
           const token = localStorage.getItem('accessToken');
           if (!token) return alert("Необходима авторизация");
           try {
-            const res = await axios.get('http://localhost:8000/api/buildings/', {
+            const res = await axios.get('https://jkh-platform.onrender.com/api/buildings/', {
             });
             setBuildings(res.data);
           } catch (err) {
@@ -128,7 +128,7 @@ export default function ReportsPage() {
     useEffect(() => {
       const fetchReports = async () => {
         try {
-          const response = await axios.get('http://localhost:8000/buildings/reports/');
+          const response = await axios.get('https://jkh-platform.onrender.com/buildings/reports/');
           setReportHistory(response.data);
         } catch (err) {
           console.error("Ошибка загрузки файлов", err);
