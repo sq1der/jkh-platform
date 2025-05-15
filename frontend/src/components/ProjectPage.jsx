@@ -97,7 +97,9 @@ const ProjectPage = () => {
           <h2 className="font-semibold text-lg mb-4">Выполненные работы</h2>
           <p className="text-sm mb-3">{project.description}</p>
           <p className="text-sm font-semibold mt-2">Местоположение:</p>
-          <p className="text-sm">{project.street}</p>
+          <p className="text-sm">
+            {project.house?.street?.name} {project.house?.house_number}
+          </p>
         </div>
       </section>
 
