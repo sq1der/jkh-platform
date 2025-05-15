@@ -1,11 +1,14 @@
 from django.db import models
 import uuid
+from .house import House
 
 class Building(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    street = models.CharField(max_length=255)
+    
+    house = models.ForeignKey(House, on_delete=models.CASCADE, related_name="buildings")
+
+
     district = models.CharField(max_length=255)
     
     latitude = models.FloatField(default=0.0)

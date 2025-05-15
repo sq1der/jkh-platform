@@ -5,3 +5,5 @@ from .payment import Payment
 from .excel_upload import ExcelUpload
 from .password_reset import PasswordResetToken
 from .report_history import ReportHistory
+from .street import Street
+from .house import House
