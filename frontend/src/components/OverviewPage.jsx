@@ -231,7 +231,7 @@ export default function Overview() {
                     onCloseClick={() => setSelectedBuilding(null)}
                   >
                     <div className="text-sm w-72 transition duration-300 animate-fade-in">
-                      <h3 className="font-bold mb-1">{selectedBuilding.address}</h3>
+                      <h3 className="font-bold mb-1">{selectedBuilding.house?.street?.name} {selectedBuilding.house?.house_number}</h3>
                       <p>Жильцов: {selectedBuilding.total_residents}</p>
                       <p>Должников: {selectedBuilding.total_debtors}</p>
                       <p>Задолженность: {selectedBuilding.total_debt} ₸</p>

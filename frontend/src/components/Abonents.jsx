@@ -241,6 +241,7 @@ export default function AbonentyPage() {
                   </th>
                   <th className="p-3 cursor-pointer" onClick={() => handleSort('iin')} >ИИН {sortConfig.key === 'iin' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                   </th>
+                  <th  className="p-3">№ Квартиры</th>
                 </tr>
               </thead>
               <tbody>
@@ -251,6 +252,7 @@ export default function AbonentyPage() {
                     <td className="p-3">{debtor.last_payment || 'Не указано'}</td>
                     <td className="p-3">{debtor.current_debt}</td>
                     <td className="p-3">{debtor.iin}</td>
+                    <td className="p-3">{debtor.apart_num}</td>
                   </tr>
                 ))}
               </tbody>

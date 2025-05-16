@@ -241,7 +241,7 @@ export default function ReportsPage() {
               <option value="">-- Выберите здание --</option>
               {buildings.map((b) => (
                 <option key={b.id} value={b.id}>
-                  {b.address}
+                  {b.house?.street?.name} {b.house?.house_number}
                 </option>
               ))}
             </select>
