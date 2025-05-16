@@ -289,7 +289,7 @@ def download_building_report(request, building_id):
     wb = generate_building_report(building)
 
     now = timezone.now().strftime("%Y-%m-%d_%H-%M")
-    filename = f"{building.address.replace(' ', '_')}_{now}.xlsx"
+    filename = f"{building.house.street.name}_{building.house.house_number}_{now}.xlsx".replace(' ', '_')
 
     from io import BytesIO
     virtual_file = BytesIO()
