@@ -5,7 +5,7 @@ from .house import House
 class Building(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    
+
     house = models.ForeignKey(House, on_delete=models.CASCADE, related_name="buildings")
 
 
@@ -32,4 +32,4 @@ class Building(models.Model):
     number_of_apartments = models.IntegerField()
 
     def __str__(self):
-        return f"Building {self.address}"
+        return f"Building {self.name} at {self.house}"

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 
-from .models import Debtor, Building, Payment, ExcelUpload, ReportHistory
+from .models import Debtor, Building, Payment, ExcelUpload, ReportHistory, House, Street
 
 
 User = get_user_model()
@@ -11,7 +11,21 @@ class DebtorSerializer(serializers.ModelSerializer):
         model = Debtor
         fields = '__all__'
 
+class StreetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Street
+        fields = '__all__'
+
+class HouseSerializer(serializers.ModelSerializer):
+    street = StreetSerializer(read_only=True)
+
+    class Meta:
+        model = House
+        fields = '__all__'
+
+
 class BuildingSerializer(serializers.ModelSerializer):
+    house = HouseSerializer(read_only=True)
 
     class Meta:
         model = Building
@@ -64,3 +78,5 @@ class ReportHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportHistory
         fields = ['id', 'building', 'file', 'created_at']
+
+

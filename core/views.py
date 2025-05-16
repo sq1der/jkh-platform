@@ -32,7 +32,7 @@ from .serializers import (
     ExcelUploadSerializer,
     LoginWithEmailSerializer,
     LoginWithIINSerializer,
-    UserSerializer
+    UserSerializer,
 )
 
 from .excel_parser import parse_excel_file
@@ -84,7 +84,7 @@ class DebtorViewSet(viewsets.ModelViewSet):
 
 
 class BuildingViewSet(viewsets.ModelViewSet):
-    queryset = Building.objects.all()
+    queryset = Building.objects.select_related('house').all()
     serializer_class = BuildingSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 

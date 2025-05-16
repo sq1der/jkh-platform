@@ -30,6 +30,8 @@ const ProjectPage = () => {
         const lng = parseFloat(res.data.longitude) || 0;
 
         setProject({ ...res.data, lat, lng });
+        
+
 
       } catch (err) {
         console.error('Ошибка при загрузке проекта:', err);
