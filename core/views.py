@@ -237,17 +237,16 @@ class PasswordResetConfirmView(generics.GenericAPIView):
     
 
 def get_debt_info(request):
-    iin = request.GET.get('iin')
+    personal_account = request.GET.get('personal_account')
 
-    if not iin:
-        return JsonResponse({'error': 'ИИН обязателен.'}, status=400)
+    if not personal_account:
+        return JsonResponse({'error': 'Лицевой счет обязателен.'}, status=400)
 
     try:
-        debtor = Debtor.objects.get(iin=iin)
+        debtor = Debtor.objects.get(personal_account=personal_account)
     except Debtor.DoesNotExist:
         return JsonResponse({'error': 'Должник не найден.'}, status=404)
 
-    # Если у тебя есть связь Debtor -> Building
     building = debtor.building
 
     # Расчёт остатка срока

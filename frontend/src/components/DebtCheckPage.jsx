@@ -6,22 +6,21 @@ import Footer from './Footer';
 
 function DebtInfoPage() {
   const location = useLocation();
-  const [iin, setIin] = useState('');
+  const [personal_account, setPersonal_account] = useState('');
   const [debtInfo, setDebtInfo] = useState(location.state?.debtInfo || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Если данные уже переданы через navigate, не нужно запрашивать их снова
-    if (!debtInfo && iin) {
+    if (!debtInfo && personal_account) {
       handleSearch(); // Запросить данные, если их нет
     }
-  }, [iin, debtInfo]);
+  }, [personal_account, debtInfo]);
 
 
   const handleSearch = async () => {
-    if (!iin.trim()) {
-      setError('Пожалуйста, введите ИИН.');
+    if (!personal_account.trim()) {
+      setError('Пожалуйста, введите номер лицевого счета.');
       return;
     }
 
@@ -30,7 +29,7 @@ function DebtInfoPage() {
 
     try {
       const response = await axios.get('https://jkh-platform.onrender.com/api/debt-info/', {
-        params: { iin }
+        params: { personal_account }
       });
 
       setDebtInfo(response.data);
@@ -65,12 +64,12 @@ function DebtInfoPage() {
           <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
             <input
               type="text"
-              value={iin}
-              onChange={(e) => setIin(e.target.value)}
+              value={personal_account}
+              onChange={(e) => setPersonal_account(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSearch();
               }}            
-              placeholder="Введите ваш ИИН"
+              placeholder="Введите ваш номер лицевого счета"
               className="w-[680px] h-[50px] px-4 text-base rounded-[20px] placeholder:text-gray-500 shadow-md"
             />
             <button

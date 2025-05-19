@@ -13,7 +13,7 @@ const center = { lat: 52.2871, lng: 76.9674 };
 
 const Home = () => {
   const navigate = useNavigate();
-  const [iin, setIin] = useState('');
+  const [personal_account, setPersonal_account] = useState('');
   const [loading, setLoading] = useState(false);
   
   const [buildings, setBuildings] = useState([]);
@@ -23,21 +23,21 @@ const Home = () => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
   const handleCheckDebt = async () => {
-    if (!iin) {
-      alert("Пожалуйста, введите ваш ИИН.");
+    if (!personal_account) {
+      alert("Пожалуйста, введите ваш номер лицевого счета.");
       return;
     }
 
     setLoading(true);
     try {
       // Отправляем запрос на сервер для проверки задолженности
-      const response = await axios.get(`https://jkh-platform.onrender.com/api/debt-info/`, { params: { iin } });
+      const response = await axios.get(`https://jkh-platform.onrender.com/api/debt-info/`, { params: { personal_account } });
 
       // Если данные получены, перенаправляем на страницу с результатами
       if (response.data) {
         navigate('/debtcheck', { state: { debtInfo: response.data } });
       } else {
-        alert('Нет данных по задолженности для данного ИИН.');
+        alert('Нет данных по задолженности для данного лицевого счета.');
       }
     } catch (error) {
       console.error('Ошибка при проверке задолженности:', error);
@@ -169,10 +169,10 @@ const Home = () => {
           <div className="flex flex-col md:flex-row justify-center items-center gap-4">
             <input
               type="text"
-              placeholder="Введите ваш ИИН"
+              placeholder="Введите ваш номер лицевого счета"
               className="w-full md:w-[680px] px-5 py-3 rounded-[20px] text-black"
-              value={iin}
-              onChange={(e) => setIin(e.target.value)}
+              value={personal_account}
+              onChange={(e) => setPersonal_account(e.target.value)}
             />
             <button 
               className="bg-[#2E2E2E] px-8 py-3 rounded-[20px] font-semibold"
