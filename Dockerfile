@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENV DATABASE_URL=postgresql://jkh_db_user:kHVhSWBlEdasUyOlv1rXaodakuM8CbVT@dpg-d07t8pur433s73bk9mq0-a/jkh_db
+ENV SECRET_KEY=django-insecure-1)z^q&wo@fd4yffb#o(!qi&31u6ahcqbv_3stl(+2_a%x&bxg&
 
 RUN python manage.py collectstatic --noinput
 
