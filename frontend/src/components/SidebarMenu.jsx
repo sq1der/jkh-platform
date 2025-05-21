@@ -100,6 +100,13 @@ const SidebarMenu = () => {
           >
             ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
           </button>
+          <a
+            href="/docs/ДЛЯ УЧАСТИЯ В МОДЕРНИЗАЦИИ.docx"
+            download
+            className="text-left"
+          >
+            ДЛЯ УЧАСТИЯ В МОДЕРНИЗАЦИИ
+          </a>
         </nav>
       </div>
     </>
