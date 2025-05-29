@@ -54,9 +54,9 @@ class DebtorViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['building']
-    search_fields = ['full_name', 'iin', 'address']
-    ordering_fields = ['full_name', 'last_payment', 'current_debt']
-    ordering = ['full_name']
+    search_fields = ['personal_account', 'iin', 'address']
+    ordering_fields = ['personal_account', 'last_payment', 'current_debt']
+    ordering = ['address']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -280,6 +280,9 @@ def get_debt_info(request):
         'house_type': building.building_type,
         'total_residents': building.total_residents,
         'apartments_count': building.number_of_apartments,
+        "saldo_in": debtor.saldo_in,
+        "charge_sum": debtor.charge_sum,
+        "saldo_out": debtor.saldo_out
     }
 
     return JsonResponse(response_data)
