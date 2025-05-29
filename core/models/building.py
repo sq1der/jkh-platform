@@ -16,8 +16,8 @@ class Building(models.Model):
     
     total_residents = models.IntegerField()
     total_debtors = models.IntegerField(default=0)
-    total_debt = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    total_square = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    total_debt = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    total_square = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     
     description = models.TextField()
     image_url = models.URLField(blank=True, null=True)

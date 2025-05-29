@@ -11,8 +11,6 @@ class Debtor(models.Model):
         ARCHIVED = 'archived', 'Архив'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
-    full_name = models.CharField(max_length=255)  
-    iin = models.CharField(max_length=12, unique=True)  
     personal_account = models.CharField(max_length=50, unique=True)  
     address = models.TextField()  
     status = models.CharField(
@@ -22,7 +20,11 @@ class Debtor(models.Model):
     )  
     building = models.ForeignKey('Building', related_name='debtors', on_delete=models.CASCADE)  
     last_payment = models.DateField(null=True, blank=True)  
-    current_debt = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) 
+    current_debt = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    saldo_in = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    charge_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    saldo_out = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+ 
 
     debt_start_date = models.DateField(null=True, blank=True)  
     initial_term_days = models.IntegerField(null=True, blank=True) 
@@ -68,9 +70,6 @@ class Debtor(models.Model):
     @property
     def monthly_payment(self):
         return round(self.credit_amount / 96, 2)
-
-    def __str__(self):
-        return f"Debtor {self.full_name} - {self.iin}"
 
     def clean(self):
         if len(self.iin) != 12 or not self.iin.isdigit():

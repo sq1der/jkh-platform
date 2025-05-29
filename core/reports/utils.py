@@ -25,7 +25,7 @@ def generate_building_report(building):
     for debtor in building.debtors.all():
         ws.append([
             debtor.apart_num,
-            debtor.full_name,
+            debtor.personal_account,
             debtor.apartment_area,
             debtor.credit_amount,
             debtor.monthly_payment,

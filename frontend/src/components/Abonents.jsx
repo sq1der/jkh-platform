@@ -233,13 +233,11 @@ export default function AbonentyPage() {
             <table className="w-full text-left text-sm">
               <thead className="bg-white">
                 <tr className="text-muted-foreground">
-                  <th className="p-3">Имя</th>
+                  <th className="p-3">Номер лицевого счета</th>
                   <th className="p-3">Адрес</th>
                   <th className="p-3 cursor-pointer" onClick={() => handleSort('last_payment')} >Дата последнего платежа {sortConfig.key === 'last_payment' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                   </th>
                   <th className="p-3 cursor-pointer" onClick={() => handleSort('current_debt')} >Сумма {sortConfig.key === 'current_debt' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
-                  </th>
-                  <th className="p-3 cursor-pointer" onClick={() => handleSort('iin')} >ИИН {sortConfig.key === 'iin' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
                   </th>
                   <th  className="p-3">№ Квартиры</th>
                 </tr>
@@ -247,11 +245,10 @@ export default function AbonentyPage() {
               <tbody>
                 {sortedDebtors.map((debtor, index) => (
                   <tr key={index} className="border-t bg-white hover:bg-gray-50">
-                    <td className="p-3 font-medium">{debtor.full_name}</td>
+                    <td className="p-3 font-medium">{debtor.personal_account}</td>
                     <td className="p-3">{debtor.address}</td>
                     <td className="p-3">{debtor.last_payment || 'Не указано'}</td>
                     <td className="p-3">{debtor.current_debt}</td>
-                    <td className="p-3">{debtor.iin}</td>
                     <td className="p-3">{debtor.apart_num}</td>
                   </tr>
                 ))}
