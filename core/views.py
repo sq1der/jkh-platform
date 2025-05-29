@@ -113,7 +113,10 @@ class DebtSearchView(APIView):
                 "debt": {
                     "address": debtor.address,
                     "current_debt": debtor.current_debt,
-                    "lastPaymentDate": debtor.last_payment
+                    "lastPaymentDate": debtor.last_payment,
+                    "saldo_in": debtor.saldo_in,
+                    "charge_sum": debtor.charge_sum,
+                    "saldo_out": debtor.saldo_out
                 }
             })
         return Response({"debt": None}, status=status.HTTP_404_NOT_FOUND)

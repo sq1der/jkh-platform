@@ -33,6 +33,7 @@ function DebtInfoPage() {
       });
 
       setDebtInfo(response.data);
+      console.log('Данные о задолженности:', response.data);
     } catch (err) {
       if (err.response) {
         setError(err.response.data.error || 'Ошибка при получении данных.');
