@@ -82,7 +82,7 @@ export default function Overview() {
     formData.append('file', file);
     try {
       const res = await axios.post(
-        'https://jkh-platform.onrender.com/upload/',
+        'https://jkh-platform.onrender.com/upload-excel/',
         formData,
         {
           headers: {

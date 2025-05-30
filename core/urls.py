@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
-from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView, PasswordResetRequestView, PasswordResetConfirmView, get_debt_info, download_building_report, get_report_history
+from .views import DebtSearchView,LoginWithEmailView, LoginWithIINView, ExcelUploadView, PasswordResetRequestView, PasswordResetConfirmView, UploadExcelView, get_debt_info, download_building_report, get_report_history
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -30,4 +30,5 @@ urlpatterns = [
     path('api/debt-info/', get_debt_info, name='get_debt_info'),
     path("buildings/<uuid:building_id>/report/", download_building_report, name="download_report"),
     path('buildings/reports/', get_report_history, name='report_history'),
+    path('upload-excel/', UploadExcelView.as_view(), name='upload-excel'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
