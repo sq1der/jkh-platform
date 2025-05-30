@@ -5,10 +5,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view, permission_classes, parser_classes
+from rest_framework.decorators import api_view, permission_classes
 from django.core.mail import send_mail
 from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import FileResponse
@@ -23,12 +22,9 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.utils import timezone
 from datetime import timedelta
-from datetime import datetime
-from decimal import Decimal
 
-import openpyxl
 from django.contrib.auth import get_user_model
-from .models import Debtor, Building, Payment, ExcelUpload, Street, House
+from .models import Debtor, Building, Payment, ExcelUpload
 from .serializers import (
     DebtorSerializer,
     BuildingSerializer,
@@ -324,91 +320,3 @@ def get_report_history(request, building_id=None):
 
     serializer = ReportHistorySerializer(reports, many=True, context={'request': request})
     return Response(serializer.data)
-
-@csrf_exempt
-@api_view(['POST'])
-@parser_classes([MultiPartParser, FormParser])
-def UploadExcelView(request):
-    file_obj = request.FILES.get('file')
-    if not file_obj:
-        return Response({"error": "Файл не найден"}, status=status.HTTP_400_BAD_REQUEST)
-
-    file_path = default_storage.save(f"uploads/{file_obj.name}", file_obj)
-
-    try:
-        workbook = openpyxl.load_workbook(default_storage.path(file_path))
-        sheet = workbook.active
-
-        def clean_int(cell):
-            try:
-                return int(str(cell).replace('\xa0', '').strip())
-            except (ValueError, TypeError):
-                return None
-
-        def clean_str(cell):
-            try:
-                return str(cell).replace('\xa0', ' ').strip()
-            except:
-                return ""
-
-        for row in sheet.iter_rows(min_row=2, values_only=True):
-            account_number = clean_int(row[0])
-            period = row[1]
-            cost_sum = row[3]
-            saldo_in = row[4]
-            pay_sum = row[5]
-            charge_sum = row[6]
-            saldo_out = row[7]
-            street_id = clean_int(row[9])
-            street_name = clean_str(row[10])
-            house_id = clean_int(row[11])
-            house_number = clean_str(row[12])
-            flat_no = clean_int(row[14])
-
-            if not all([street_id, street_name, house_id, house_number, account_number, flat_no]):
-                continue
-
-            street, _ = Street.objects.get_or_create(
-                id=street_id,
-                defaults={"name": street_name}
-            )
-
-            house, _ = House.objects.get_or_create(
-                id=house_id,
-                defaults={"street": street, "number": house_number}
-            )
-
-            try:
-                building = Building.objects.get(house=house)
-            except Building.DoesNotExist:
-                continue
-
-            full_address = f"ул. {street.name}, дом {house.house_number}, кв. {flat_no}"
-
-            try:
-                last_payment = datetime.strptime(str(period), "%d.%m.%Y").date()
-            except Exception:
-                last_payment = None
-
-            Debtor.objects.update_or_create(
-                personal_account=account_number,
-                defaults={
-                    "building": building,
-                    "address": full_address,
-                    "status": Debtor.Status.ACTIVE,
-                    "last_payment": last_payment,
-                    "current_debt": Decimal(cost_sum) if cost_sum else 0,
-                    "saldo_in": Decimal(saldo_in) if saldo_in else 0,
-                    "charge_sum": Decimal(charge_sum) if charge_sum else 0,
-                    "saldo_out": Decimal(saldo_out) if saldo_out else 0,
-                    "debt_start_date": datetime.today(),
-                    "initial_term_days": 365 * 8,
-                    "apartment_area": Decimal("60.0"),
-                    "apart_num": flat_no,
-                }
-            )
-
-        return Response({"message": "Файл успешно обработан"}, status=status.HTTP_200_OK)
-
-    except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
