@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from django.core.mail import send_mail
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -326,95 +326,89 @@ def get_report_history(request, building_id=None):
     return Response(serializer.data)
 
 @csrf_exempt
-class UploadExcelView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])
+def UploadExcelView(request):
+    file_obj = request.FILES.get('file')
+    if not file_obj:
+        return Response({"error": "Файл не найден"}, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, format=None):
-        file_obj = request.FILES.get('file')
-        if not file_obj:
-            return Response({"error": "Файл не найден"}, status=status.HTTP_400_BAD_REQUEST)
+    file_path = default_storage.save(f"uploads/{file_obj.name}", file_obj)
 
-        file_path = default_storage.save(f"uploads/{file_obj.name}", file_obj)
+    try:
+        workbook = openpyxl.load_workbook(default_storage.path(file_path))
+        sheet = workbook.active
 
-        try:
-            workbook = openpyxl.load_workbook(default_storage.path(file_path))
-            sheet = workbook.active
+        def clean_int(cell):
+            try:
+                return int(str(cell).replace('\xa0', '').strip())
+            except (ValueError, TypeError):
+                return None
 
-            def clean_int(cell):
-                try:
-                    return int(str(cell).replace('\xa0', '').strip())
-                except (ValueError, TypeError):
-                    return None
+        def clean_str(cell):
+            try:
+                return str(cell).replace('\xa0', ' ').strip()
+            except:
+                return ""
 
-            def clean_str(cell):
-                try:
-                    return str(cell).replace('\xa0', ' ').strip()
-                except:
-                    return ""
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            account_number = clean_int(row[0])
+            period = row[1]
+            cost_sum = row[3]
+            saldo_in = row[4]
+            pay_sum = row[5]
+            charge_sum = row[6]
+            saldo_out = row[7]
+            street_id = clean_int(row[9])
+            street_name = clean_str(row[10])
+            house_id = clean_int(row[11])
+            house_number = clean_str(row[12])
+            flat_no = clean_int(row[14])
 
-            for row in sheet.iter_rows(min_row=2, values_only=True):
-                account_number = clean_int(row[0])
-                period = row[1]
-                cost_sum = row[3]
-                saldo_in = row[4]
-                pay_sum = row[5]
-                charge_sum = row[6]
-                saldo_out = row[7]
-                street_id = clean_int(row[9])
-                street_name = clean_str(row[10])
-                house_id = clean_int(row[11])
-                house_number = clean_str(row[12])
-                flat_no = clean_int(row[14])
+            if not all([street_id, street_name, house_id, house_number, account_number, flat_no]):
+                continue
 
-                if not all([street_id, street_name, house_id, house_number, account_number, flat_no]):
-                    continue
+            street, _ = Street.objects.get_or_create(
+                id=street_id,
+                defaults={"name": street_name}
+            )
 
-                street_name = str(street_name).strip()
-                house_number = str(house_number).strip()
-                flat_no = str(flat_no).strip()
-                account_number = str(account_number).strip()
+            house, _ = House.objects.get_or_create(
+                id=house_id,
+                defaults={"street": street, "number": house_number}
+            )
 
-                street, _ = Street.objects.get_or_create(
-                    id=street_id,
-                    defaults={"name": street_name}
-                )
+            try:
+                building = Building.objects.get(house=house)
+            except Building.DoesNotExist:
+                continue
 
-                house, _ = House.objects.get_or_create(
-                    id=house_id,
-                    defaults={"street": street, "number": house_number}
-                )
+            full_address = f"ул. {street.name}, дом {house.number}, кв. {flat_no}"
 
-                try:
-                    building = Building.objects.get(house=house)
-                except Building.DoesNotExist:
-                    continue
+            try:
+                last_payment = datetime.strptime(str(period), "%d.%m.%Y").date()
+            except Exception:
+                last_payment = None
 
-                full_address = f"ул. {street.name}, дом {house.house_number}, кв. {flat_no}"
+            Debtor.objects.update_or_create(
+                personal_account=str(account_number),
+                defaults={
+                    "building": building,
+                    "address": full_address,
+                    "status": Debtor.Status.ACTIVE,
+                    "last_payment": last_payment,
+                    "current_debt": Decimal(cost_sum) if cost_sum else 0,
+                    "saldo_in": Decimal(saldo_in) if saldo_in else 0,
+                    "charge_sum": Decimal(charge_sum) if charge_sum else 0,
+                    "saldo_out": Decimal(saldo_out) if saldo_out else 0,
+                    "debt_start_date": datetime.today(),
+                    "initial_term_days": 365 * 8,
+                    "apartment_area": Decimal("60.0"),
+                    "apart_num": str(flat_no),
+                }
+            )
 
-                try:
-                    last_payment = datetime.strptime(str(period), "%d.%m.%Y").date()
-                except Exception:
-                    last_payment = None
+        return Response({"message": "Файл успешно обработан"}, status=status.HTTP_200_OK)
 
-                debtor, created = Debtor.objects.update_or_create(
-                    personal_account=account_number,
-                    defaults={
-                        "building": building,
-                        "address": full_address,
-                        "status": Debtor.Status.ACTIVE,
-                        "last_payment": last_payment,
-                        "current_debt": Decimal(cost_sum) if cost_sum else 0,
-                        "saldo_in": Decimal(saldo_in) if saldo_in else 0,
-                        "charge_sum": Decimal(charge_sum) if charge_sum else 0,
-                        "saldo_out": Decimal(saldo_out) if saldo_out else 0,
-                        "debt_start_date": datetime.today(),
-                        "initial_term_days": 365 * 8,
-                        "apartment_area": Decimal("60.0"),
-                        "apart_num": flat_no,
-                    }
-                )
-
-            return Response({"message": "Файл успешно обработан"}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

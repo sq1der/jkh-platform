@@ -30,5 +30,5 @@ urlpatterns = [
     path('api/debt-info/', get_debt_info, name='get_debt_info'),
     path("buildings/<uuid:building_id>/report/", download_building_report, name="download_report"),
     path('buildings/reports/', get_report_history, name='report_history'),
-    path('upload-excel/', UploadExcelView.as_view(), name='upload-excel'),
+    path('upload-excel/', UploadExcelView, name='parse-excel'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
