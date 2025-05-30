@@ -325,7 +325,7 @@ def get_report_history(request, building_id=None):
     serializer = ReportHistorySerializer(reports, many=True, context={'request': request})
     return Response(serializer.data)
 
-
+@csrf_exempt
 class UploadExcelView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
