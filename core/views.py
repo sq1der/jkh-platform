@@ -383,7 +383,7 @@ def UploadExcelView(request):
             except Building.DoesNotExist:
                 continue
 
-            full_address = f"ул. {street.name}, дом {house.number}, кв. {flat_no}"
+            full_address = f"ул. {street.name}, дом {house.house_number}, кв. {flat_no}"
 
             try:
                 last_payment = datetime.strptime(str(period), "%d.%m.%Y").date()
@@ -391,7 +391,7 @@ def UploadExcelView(request):
                 last_payment = None
 
             Debtor.objects.update_or_create(
-                personal_account=str(account_number),
+                personal_account=account_number,
                 defaults={
                     "building": building,
                     "address": full_address,
@@ -404,7 +404,7 @@ def UploadExcelView(request):
                     "debt_start_date": datetime.today(),
                     "initial_term_days": 365 * 8,
                     "apartment_area": Decimal("60.0"),
-                    "apart_num": str(flat_no),
+                    "apart_num": flat_no,
                 }
             )
 
