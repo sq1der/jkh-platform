@@ -1,5 +1,0 @@
-services:
-  - type: web
-    name: jkh-platform
-    env: docker
-    dockerfilePath: ./Dockerfile
