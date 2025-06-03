@@ -111,7 +111,7 @@ export default function AbonentyPage() {
   
     try {
       const res = await axios.post(
-        'https://modernizaciya.kz/upload/',
+        '/upload/',
         formData,
         {
           headers: {

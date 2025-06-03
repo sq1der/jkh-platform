@@ -12,7 +12,7 @@ export default function ResetPassword() {
   const handleSave = async () => {
     setError('');
     try {
-      const res = await fetch('https://modernizaciya.kz/password-reset/confirm/', {
+      const res = await fetch('/password-reset/confirm/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, new_password: password }),

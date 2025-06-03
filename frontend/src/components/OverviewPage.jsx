@@ -36,7 +36,7 @@ export default function Overview() {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
       const decoded = jwtDecode(token);
-      const res = await axios.get(`https://modernizaciya.kz/api/users/${decoded.user_id}/`, {
+      const res = await axios.get(`/api/users/${decoded.user_id}/`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAdminName(res.data.full_name);
@@ -47,7 +47,7 @@ export default function Overview() {
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
-        const res = await axios.get('https://modernizaciya.kz/api/buildings/', {
+        const res = await axios.get('/api/buildings/', {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
 
@@ -82,7 +82,7 @@ export default function Overview() {
     formData.append('file', file);
     try {
       const res = await axios.post(
-        'https://modernizaciya.kz/upload/',
+        '/upload/',
         formData,
         {
           headers: {
