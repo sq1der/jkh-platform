@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jkh-platform.onrender.com' , 'localhost', '127.0.0.1:8000']
+ALLOWED_HOSTS = ['jkh-platform.onrender.com' , 'localhost', 'https://modernizaciya.kz', "85.202.192.60" ]
 
 
 # Application definition
