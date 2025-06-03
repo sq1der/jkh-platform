@@ -25,7 +25,7 @@ const ProjectPage = () => {
     const fetchProject = async () => {
       try {
         console.log(id);
-        const res = await axios.get(`https://jkh-platform.onrender.com/api/buildings/${id}/`);
+        const res = await axios.get(`https://modernizaciya.kz/api/buildings/${id}/`);
         const lat = parseFloat(res.data.latitude) || 0;
         const lng = parseFloat(res.data.longitude) || 0;
 

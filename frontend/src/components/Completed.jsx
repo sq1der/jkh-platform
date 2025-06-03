@@ -21,7 +21,7 @@ const CompletedProjects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('https://jkh-platform.onrender.com/api/buildings/');
+        const response = await axios.get('https://modernizaciya.kz/api/buildings/');
         setProjects(response.data);
       } catch (error) {
         console.error('Ошибка при получении проектов:', error);

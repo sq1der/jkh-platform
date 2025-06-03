@@ -9,7 +9,7 @@ export default function ForgotPassword() {
   const handleSubmit = async () => {
     setError('');
     try {
-      const res = await fetch('https://jkh-platform.onrender.com/password-reset/', {
+      const res = await fetch('https://modernizaciya.kz/password-reset/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),

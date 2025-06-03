@@ -24,7 +24,7 @@ export default function ReportsPage() {
     
       try {
         const res = await axios.post(
-          'https://jkh-platform.onrender.com/upload/',
+          'https://modernizaciya.kz/upload/',
           formData,
           {
             headers: {
@@ -47,7 +47,7 @@ export default function ReportsPage() {
       if (!token) return alert("Необходима авторизация");
       try {
         const response = await axios.post(
-          `https://jkh-platform.onrender.com/buildings/${buildingId}/report/`,
+          `https://modernizaciya.kz/buildings/${buildingId}/report/`,
           {},
           {
             responseType: 'blob', 
@@ -100,7 +100,7 @@ export default function ReportsPage() {
           const token = localStorage.getItem('accessToken');
           if (!token) return alert("Необходима авторизация");
           try {
-            const res = await axios.get('https://jkh-platform.onrender.com/api/buildings/', {
+            const res = await axios.get('https://modernizaciya.kz/api/buildings/', {
             });
             setBuildings(res.data);
           } catch (err) {
@@ -116,7 +116,7 @@ export default function ReportsPage() {
         const token = localStorage.getItem('accessToken');
         if (!token) return;
         const decoded = jwtDecode(token);
-        const res = await axios.get(`https://jkh-platform.onrender.com/api/users/${decoded.user_id}/`, {
+        const res = await axios.get(`https://modernizaciya.kz/api/users/${decoded.user_id}/`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setAdminName(res.data.full_name);
@@ -128,7 +128,7 @@ export default function ReportsPage() {
     useEffect(() => {
       const fetchReports = async () => {
         try {
-          const response = await axios.get('https://jkh-platform.onrender.com/buildings/reports/');
+          const response = await axios.get('https://modernizaciya.kz/buildings/reports/');
           setReportHistory(response.data);
         } catch (err) {
           console.error("Ошибка загрузки файлов", err);

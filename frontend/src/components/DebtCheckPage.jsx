@@ -28,7 +28,7 @@ function DebtInfoPage() {
     setError('');
 
     try {
-      const response = await axios.get('https://jkh-platform.onrender.com/api/debt-info/', {
+      const response = await axios.get('https://modernizaciya.kz/api/debt-info/', {
         params: { personal_account }
       });
 

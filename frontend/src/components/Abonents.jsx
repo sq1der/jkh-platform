@@ -111,7 +111,7 @@ export default function AbonentyPage() {
   
     try {
       const res = await axios.post(
-        'https://jkh-platform.onrender.com/upload/',
+        'https://modernizaciya.kz/upload/',
         formData,
         {
           headers: {

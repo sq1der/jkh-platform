@@ -31,7 +31,7 @@ const Home = () => {
     setLoading(true);
     try {
       // Отправляем запрос на сервер для проверки задолженности
-      const response = await axios.get(`https://jkh-platform.onrender.com/api/debt-info/`, { params: { personal_account } });
+      const response = await axios.get(`https://modernizaciya.kz/api/debt-info/`, { params: { personal_account } });
 
       // Если данные получены, перенаправляем на страницу с результатами
       if (response.data) {
@@ -51,7 +51,7 @@ const Home = () => {
   useEffect(() => {
     const fetchBuildings = async () => {
       try {
-        const res = await axios.get('https://jkh-platform.onrender.com/api/buildings/', {
+        const res = await axios.get('https://modernizaciya.kz/api/buildings/', {
         });
 
         const parsed = res.data.map(item => ({

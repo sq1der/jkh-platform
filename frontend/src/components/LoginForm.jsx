@@ -18,7 +18,7 @@ const LoginForm = () => {
     setError('');
 
     try {
-      const response = await fetch('https://jkh-platform.onrender.com/login/email/', {
+      const response = await fetch('https://modernizaciya.kz/login/email/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
