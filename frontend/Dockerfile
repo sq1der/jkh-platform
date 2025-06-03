@@ -1,10 +1,5 @@
 FROM node:alpine as build
 
-RUN apk update && apk install -y \
-    binutils \
-    && apk clean
-
-WORKDIR /app
 COPY package.json .
 RUN npm install
 
