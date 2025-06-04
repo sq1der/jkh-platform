@@ -19,6 +19,8 @@ from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSer
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 from django.utils import timezone
 from datetime import timedelta
@@ -122,6 +124,7 @@ class DebtSearchView(APIView):
         return Response({"debt": None}, status=status.HTTP_404_NOT_FOUND)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginWithEmailView(APIView):
     permission_classes = [AllowAny]
 
