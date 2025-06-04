@@ -24,11 +24,6 @@ export default function ActivityPage() {
 
         {/* Контент в хедере */}
         <div className="relative z-10 max-w-6xl w-full flex flex-col md:flex-row items-center gap-10">
-            <img
-            src="/logo.png"
-            alt="Логотип"
-            className="w-[236px] h-[236px] object-contain"
-            />
             <div className="space-y-4 text-lg leading-relaxed font-montserrat">
             <p>
                 <span className="font-bold">ТОО Горкомхоз Модернизация Жилья</span> — это специализированный орган, отвечающий за развитие, контроль и цифровизацию процессов в сфере жилищно-коммунального хозяйства города Павлодара.

@@ -87,7 +87,6 @@ const Home = () => {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-snug mb-6 uppercase text-white">
             Горкомхоз Модернизация Жилья
           </h1>
-          <img src="/logo.png" alt="Логотип" className="w-36 md:w-44 mb-6" />
 
           <div className="mt-40">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-64 max-w-7xl w-full px-1 justify-items-center">
