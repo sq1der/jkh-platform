@@ -10,10 +10,10 @@ const Footer = () => {
         </div>
         <div>
           <p>
-            <span className="font-semibold">Телефон:</span> +7 (7182) 32–22–30
+            <span className="font-semibold"> ⁠Контактный телефон:</span> +7 7182 622 20 22
           </p>
           <p>
-            <span className="font-semibold">Телефон:</span> +7 (7182) 32–22–60
+            <span className="font-semibold">Электронная почта:</span> modernizaciya@list.ru
           </p>
         </div>
         <div>
