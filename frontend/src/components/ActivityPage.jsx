@@ -15,7 +15,7 @@ export default function ActivityPage() {
         {/* Заголовок поверх изображения */}
         <div className="absolute top-0 left-0 w-full text-center py-6 z-20">
             <h1 className="text-white text-xl md:text-3xl font-bold tracking-widest uppercase">
-            Городской комитет модернизации жилья
+            Горкомхоз Модернизация Жилья
             </h1>
         </div>
 

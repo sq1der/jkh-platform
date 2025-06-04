@@ -60,7 +60,7 @@ const SidebarMenu = () => {
           }}
           className="text-[20px] font-extrabold leading-tight uppercase tracking-wide mb-12 text-left cursor-pointer select-none"
         >
-          КОМИТЕТ <br /> МОДЕРНИЗАЦИИ ЖИЛЬЯ
+          ГОРКОМХОЗ <br /> МОДЕРНИЗАЦИИ ЖИЛЬЯ
         </h1>
 
         <nav className="flex flex-col gap-8 text-[16px] font-bold leading-snug tracking-wide uppercase">
