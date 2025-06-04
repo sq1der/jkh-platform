@@ -5,7 +5,7 @@ from .models import Debtor, Payment, ExcelUpload
 from decimal import Decimal
 
 
-REQUIRED_COLUMNS = ['ACCOUNT', 'SERVICE_ID', 'PAY_SUM', 'PERIOD']
+REQUIRED_COLUMNS = ['ACCOUNT', 'SERVICE_ID', 'PAY_SUM', 'PAY_DATE']
 
 def parse_excel_file(file_path, upload: ExcelUpload):
     error_log = []
@@ -21,19 +21,19 @@ def parse_excel_file(file_path, upload: ExcelUpload):
                 return {'success': False, 'error': f'Отсутствует колонка: {col}'}
 
         df = df[df['SERVICE_ID'] == 1061]
-        df = df[df['PERIOD'].notnull()]
+        df = df[df['PAY_DATE'].notnull()]
         if df.empty:
             upload.status = 'error'
-            upload.error_log = {'no_valid_rows': 'Нет строк с PERIOD'}
+            upload.error_log = {'no_valid_rows': 'Нет строк с PAY_DATE'}
             upload.save()
-            return {'success': False, 'error': 'Нет строк с PERIOD'}
+            return {'success': False, 'error': 'Нет строк с PAY_DATE'}
 
         with transaction.atomic():
             for index, row in df.iterrows():
                 try:
                     account = str(row['ACCOUNT']).strip()
                     pay_sum = Decimal(str(row['PAY_SUM']))
-                    pay_date = pd.to_datetime(row['PERIOD']).date()
+                    pay_date = pd.to_datetime(row['PAY_DATE']).date()
 
                     debtor = Debtor.objects.filter(personal_account=account).first()
 
