@@ -82,7 +82,7 @@ export default function Overview() {
     formData.append('file', file);
     try {
       const res = await axios.post(
-        '/upload/',
+        'api/upload/',
         formData,
         {
           headers: {

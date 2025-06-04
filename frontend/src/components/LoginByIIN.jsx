@@ -13,7 +13,7 @@ const LoginByIIN = () => {
     setError('');
 
     try {
-      const response = await fetch('/login/iin/', {
+      const response = await fetch('/api/login/iin/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ iin }),

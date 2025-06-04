@@ -51,10 +51,10 @@ export default function ActivityPage() {
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
                 <h3 className="text-lg font-semibold mb-2">
-                Автоматизация учета данных
+                Модернизация жилых домов
                 </h3>
                 <p className="text-sm font-light">
-                Комитет внедряет систему автоматизированного приема и обработки данных по коммунальным платежам, позволяя избавиться от ручного труда и снизить риск ошибок.
+                    Проведение капитального ремонта многоквартирных домов, включая замену инженерных сетей (водоснабжение, отопление, канализация, электроснабжение), утепление фасадов, ремонт крыш и подвальных помещений.
                 </p>
             </div>
             <img
@@ -67,9 +67,9 @@ export default function ActivityPage() {
             {/* Блок 2 */}
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
-                <h3 className="text-lg font-semibold mb-2">Контроль задолженности</h3>
+                <h3 className="text-lg font-semibold mb-2">Значение деятельности:</h3>
                 <p className="text-sm font-light">
-                На основе регулярно поступающих данных от поставщиков услуг осуществляется автоматическое формирование отчетов по задолженности жильцов.
+                Работа ТОО “Горкомхоз Модернизация жилья” способствует улучшению качества жизни граждан, снижению коммунальных расходов, увеличению срока эксплуатации жилого фонда и общему благоустройству городской среды.
                 </p>
             </div>
             <img
@@ -83,10 +83,10 @@ export default function ActivityPage() {
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
                 <h3 className="text-lg font-semibold mb-2">
-                Мониторинг состояния жилых объектов
+                Энергосбережение:
                 </h3>
                 <p className="text-sm font-light">
-                Благодаря интерактивной карте и аналитическим инструментам сотрудники могут отслеживать текущую ситуацию на объектах, выявлять проблемные зоны и формировать оперативные отчеты.
+                Внедрение современных технологий для снижения потребления энергии, установка энергосберегающего оборудования, теплоизоляция зданий.
                 </p>
             </div>
             <img
@@ -99,9 +99,10 @@ export default function ActivityPage() {
             {/* Блок 4 */}
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
-                <h3 className="text-lg font-semibold mb-2">Содействие в цифровизации ЖКХ</h3>
+                <h3 className="text-lg font-semibold mb-2">Работа с жильцами:
+                </h3>
                 <p className="text-sm font-light">
-                Комитет разрабатывает и внедряет удобные цифровые инструменты для подрядчиков и управляющих компаний: от ведения личных кабинетов до аналитики по каждому адресу.
+                Ведение разъяснительной работы среди собственников жилья, сбор согласий на участие в программах модернизации, консультирование по вопросам финансирования и технического сопровождения проектов.
                 </p>
             </div>
             <img

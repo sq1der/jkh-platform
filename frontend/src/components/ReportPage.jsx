@@ -24,7 +24,7 @@ export default function ReportsPage() {
     
       try {
         const res = await axios.post(
-          '/upload/',
+          '/api/upload/',
           formData,
           {
             headers: {
@@ -47,7 +47,7 @@ export default function ReportsPage() {
       if (!token) return alert("Необходима авторизация");
       try {
         const response = await axios.post(
-          `/buildings/${buildingId}/report/`,
+          `/api/buildings/${buildingId}/report/`,
           {},
           {
             responseType: 'blob', 
@@ -128,7 +128,7 @@ export default function ReportsPage() {
     useEffect(() => {
       const fetchReports = async () => {
         try {
-          const response = await axios.get('/buildings/reports/');
+          const response = await axios.get('/api/buildings/reports/');
           setReportHistory(response.data);
         } catch (err) {
           console.error("Ошибка загрузки файлов", err);

@@ -36,6 +36,7 @@ export default function AbonentyPage() {
           }
         });
 
+
         if (response.ok) {
           const data = await response.json();
           setAdminName(data.full_name);
@@ -111,7 +112,7 @@ export default function AbonentyPage() {
   
     try {
       const res = await axios.post(
-        '/upload/',
+        '/api/upload/',
         formData,
         {
           headers: {
