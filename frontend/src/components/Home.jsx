@@ -144,11 +144,7 @@ const Home = () => {
           >
             О деятельности
           </button>
-          <button
-            className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
-          >
-            Структура организации
-          </button>
+
           <button
             className="bg-[#2E2E2E] text-white text-base md:text-lg h-[60px] w-[530px] rounded-[20px] font-semibold"
             onClick={() => navigate('/projects')}
