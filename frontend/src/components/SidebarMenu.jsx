@@ -75,15 +75,6 @@ const SidebarMenu = () => {
           </button>
           <button
             onClick={() => {
-              navigate('/organization');
-              setMenuOpen(false);
-            }}
-            className="text-left"
-          >
-            СТРУКТУРА ОРГАНИЗАЦИИ
-          </button>
-          <button
-            onClick={() => {
               navigate('/projects');
               setMenuOpen(false);
             }}

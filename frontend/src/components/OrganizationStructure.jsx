@@ -6,11 +6,11 @@ export default function StructurePage() {
     <div className="text-white w-full">
       {/* Меню бар */}
       <SidebarMenu />
-      {/* Фоновый блок (на всю ширину) */}
+     {/* Фоновый блок (на всю ширину) */}
       <div
         className="relative w-full h-[616px] bg-cover bg-center  overflow-hidden"
         style={{ backgroundImage: "url('/main.jpg')" }}
-      >
+     >
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative z-10 flex flex-col items-start justify-center h-full px-6 lg:px-[208px] max-w-[1440px] mx-auto">
           <h1 className="text-[32px] font-bold uppercase font-montserrat leading-tight max-w-[853px] mb-6">
