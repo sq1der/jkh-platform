@@ -20,6 +20,6 @@ from rest_framework.routers import DefaultRouter
 from core import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('api/admin/', admin.site.urls),
     path('', include('core.urls')),
 ]
