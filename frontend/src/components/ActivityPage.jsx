@@ -55,10 +55,10 @@ export default function ActivityPage() {
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
                 <h3 className="text-lg font-semibold mb-2">
-                Модернизация жилых домов
+                Ремонт кровли
                 </h3>
                 <p className="text-sm font-light">
-                    Проведение капитального ремонта многоквартирных домов, включая замену инженерных сетей (водоснабжение, отопление, канализация, электроснабжение), утепление фасадов, ремонт крыш и подвальных помещений.
+                Замена старых или изношенных кровельных покрытий для предотвращения протечек и продления срока эксплуатации здания.
                 </p>
             </div>
             <img
@@ -71,9 +71,9 @@ export default function ActivityPage() {
             {/* Блок 2 */}
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
-                <h3 className="text-lg font-semibold mb-2">Значение деятельности:</h3>
+                <h3 className="text-lg font-semibold mb-2">Фасадные работы</h3>
                 <p className="text-sm font-light">
-                Работа ТОО “Горкомхоз Модернизация жилья” способствует улучшению качества жизни граждан, снижению коммунальных расходов, увеличению срока эксплуатации жилого фонда и общему благоустройству городской среды.
+                Утепление и ремонт фасадов с целью повышения энергоэффективности зданий и улучшения внешнего вида.
                 </p>
             </div>
             <img
@@ -87,10 +87,13 @@ export default function ActivityPage() {
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
                 <h3 className="text-lg font-semibold mb-2">
-                Энергосбережение:
+                Замена инженерных сетей
                 </h3>
                 <p className="text-sm font-light">
-                Внедрение современных технологий для снижения потребления энергии, установка энергосберегающего оборудования, теплоизоляция зданий.
+                •	Системы отопления
+	            •	Водоснабжения и канализации
+	            •	Электроснабжения
+                Это позволяет улучшить качество предоставляемых коммунальных услуг.
                 </p>
             </div>
             <img
@@ -103,10 +106,10 @@ export default function ActivityPage() {
             {/* Блок 4 */}
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[225px] flex items-center shadow-md">
             <div className="flex-1">
-                <h3 className="text-lg font-semibold mb-2">Работа с жильцами:
+                <h3 className="text-lg font-semibold mb-2">Модернизация лифтового оборудования
                 </h3>
                 <p className="text-sm font-light">
-                Ведение разъяснительной работы среди собственников жилья, сбор согласий на участие в программах модернизации, консультирование по вопросам финансирования и технического сопровождения проектов.
+                Установка новых лифтов взамен устаревших и неисправных, обеспечение безопасной и комфортной эксплуатации.
                 </p>
             </div>
             <img
@@ -119,9 +122,9 @@ export default function ActivityPage() {
             {/* Блок 5 */}
             <div className="relative bg-[#05A7E3] text-white rounded-[10px] p-6 h-[311px] flex items-center shadow-md">
             <div className="flex-1 z-10">
-                <h3 className="text-lg font-semibold mb-2">Информационная прозрачность</h3>
+                <h3 className="text-lg font-semibold mb-2">Ремонт подъездов, подвалов и чердаков</h3>
                 <p className="text-sm font-light">
-                На сайте публикуется информация о завершенных проектах, структуре организации и ходе текущих работ по модернизации объектов.
+                Приведение в порядок общедомового имущества для соблюдения санитарных норм и создания комфортной среды.
                 </p>
             </div>
             <img

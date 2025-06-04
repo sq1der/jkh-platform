@@ -30,7 +30,7 @@ export default function AbonentyPage() {
         if (!token) return;
 
         const decoded = jwtDecode(token);
-        const response = await fetch(`${API_URL}/api/users/${decoded.user_id}/`, {
+        const response = await fetch(`/api/users/${decoded.user_id}/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -77,7 +77,7 @@ export default function AbonentyPage() {
   
         const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
   
-        const response = await fetch(`${API_URL}/api/debtors/${queryString}`, {
+        const response = await fetch(`/api/debtors/${queryString}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
