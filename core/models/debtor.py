@@ -24,6 +24,7 @@ class Debtor(models.Model):
     saldo_in = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     charge_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     saldo_out = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    pay_sum = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
  
 
     debt_start_date = models.DateField(null=True, blank=True)  

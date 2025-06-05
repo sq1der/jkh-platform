@@ -285,7 +285,8 @@ def get_debt_info(request):
         'apartments_count': building.number_of_apartments,
         "saldo_in": debtor.saldo_in,
         "charge_sum": debtor.charge_sum,
-        "saldo_out": debtor.saldo_out
+        "saldo_out": debtor.saldo_out,
+        "pay_sum": debtor.pay_sum
     }
 
     return JsonResponse(response_data)

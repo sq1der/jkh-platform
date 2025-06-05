@@ -69,7 +69,7 @@ for row in sheet.iter_rows(min_row=2, values_only=True):
     try:
         building = Building.objects.get(house=house)
     except Building.DoesNotExist:
-        print(f"❌ Здание '{house}' не найдено для дома {house.number}")
+        print(f"❌ Здание '{house}' не найдено для дома {house.house_number}")
 
     # Формируем адрес
     full_address = f"ул. {street.name}, дом {house.house_number}, кв. {flat_no}"
@@ -92,6 +92,7 @@ for row in sheet.iter_rows(min_row=2, values_only=True):
             "saldo_in": Decimal(saldo_in) if saldo_in else 0,
             "charge_sum": Decimal(charge_sum) if charge_sum else 0,
             "saldo_out": Decimal(saldo_out) if saldo_out else 0,
+            "pay_sum": Decimal(pay_sum) if pay_sum else 0,
             "debt_start_date": datetime.today,
             "initial_term_days": 365 * 8,  # 8 лет (пример)
             "apartment_area": Decimal("60.0"),  # Пока по умолчанию, если есть колонка — добавим
