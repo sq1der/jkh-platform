@@ -100,11 +100,11 @@ function DebtInfoPage() {
                   Остаток срока: <span className="font-bold">{debtInfo.remaining_term}</span>
                 </p>
                 <p>
-                  Оплачено за предыдущий месяц: <span className="font-bold">{debtInfo.pay_sum} тенге</span>
+                Сумма, оплаченная за прошлый месяц: <span className="font-bold">{debtInfo.pay_sum} тенге</span>
                 </p>                <p>
-                  Сколько оплачено за предыдущий месяц: <span className="font-bold">{debtInfo.saldo_in} тенге</span>
+                 Сколько подлежало оплате за прошлый месяц: <span className="font-bold">{debtInfo.saldo_in} тенге</span>
                 </p>                <p>
-                  Сколько нужно оплатить в это месяце: <span className="font-bold">{debtInfo.saldo_out} тенге</span>
+                 Сумма к оплате за текущий месяц составляет: <span className="font-bold">{debtInfo.saldo_out} тенге</span>
                 </p>
               </div>
         
