@@ -73,15 +73,22 @@ const ProjectPage = () => {
       </section>
 
       <section className="max-w-7xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        {project.gallery?.map((img, index) => (
-          <img
-            key={index}
-            src={img}
-            alt={`Фото ${index + 1}`}
-            className="w-full h-64 object-cover rounded-xl shadow"
-          />
-        ))}
-      </section>
+        {[
+          project.image_url,
+          project.image_url_2,
+           ...(project.gallery || [])
+        ]
+          .filter(Boolean)
+          .map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Фото ${index + 1}`}
+              className="w-full h-64 object-cover rounded-xl shadow"
+            />
+          ))}
+       </section>
+
 
       <section className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
         <div className="col-span-2 bg-white rounded-2xl overflow-hidden shadow">
