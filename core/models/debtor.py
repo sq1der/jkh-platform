@@ -72,6 +72,3 @@ class Debtor(models.Model):
     def monthly_payment(self):
         return round(self.credit_amount / 96, 2)
 
-    def clean(self):
-        if len(self.iin) != 12 or not self.iin.isdigit():
-            raise ValidationError("ИИН должен быть 12 цифр.")
