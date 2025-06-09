@@ -5,6 +5,8 @@ import axios from 'axios';
 import Footer from './Footer';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
+
 
 
 
@@ -38,6 +40,8 @@ const CompletedProjects = () => {
     return [project.image_url, project.image_url_2].filter(Boolean);
   };
   
+  const images = getImageUrls(project);
+
 
   return (
     <div className="min-h-screen flex flex-col bg-[#121212] text-black relative">
