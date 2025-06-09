@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import SidebarMenu from '../components/SidebarMenu';
 import axios from 'axios';
 import Footer from './Footer';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 
 
 const CompletedProjects = () => {
@@ -30,6 +33,11 @@ const CompletedProjects = () => {
 
     fetchProjects();
   }, []);
+
+  const getImageUrls = (project) => {
+    return [project.image_url, project.image_url_2].filter(Boolean);
+  };
+  
 
   return (
     <div className="min-h-screen flex flex-col bg-[#121212] text-black relative">
@@ -68,11 +76,18 @@ const CompletedProjects = () => {
                 </Link>
 
               </div>
-              <img
-                src={project.image_url}
-                alt={project.title}
-                className="w-[204px] h-[408px] object-cover"
-              />
+              <div className="w-[204px] h-[408px]">
+                <Slider dots infinite speed={500} slidesToShow={1} slidesToScroll={1}>
+                 {images.map((url, i) => (
+                  <img
+                    key={i}
+                     src={url}
+                     alt={`Project ${project.name} Image ${i + 1}`}
+                    className="w-[204px] h-[408px] object-cover"
+                  />
+                 ))}
+                </Slider>
+              </div>
             </div>
           ))}
         </div>

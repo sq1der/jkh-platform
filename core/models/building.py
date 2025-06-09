@@ -21,6 +21,7 @@ class Building(models.Model):
     
     description = models.TextField()
     image_url = models.URLField(blank=True, null=True)
+    image_url_2 = models.URLField(blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
