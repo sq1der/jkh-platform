@@ -62,7 +62,7 @@ function DebtInfoPage() {
           <h1 className="text-white text-2xl md:text-3xl font-bold mb-6">
             ПРОСМОТР ЗАДОЛЖЕННОСТИ ПО ОБЪЕКТУ
           </h1>
-          <div className="flex flex-col md:flex-row items-center gap-4 mt-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full max-w-[900px] px-4">
             <input
               type="text"
               value={personal_account}
@@ -71,26 +71,29 @@ function DebtInfoPage() {
                 if (e.key === 'Enter') handleSearch();
               }}            
               placeholder="Введите ваш номер лицевого счета"
-              className="w-[680px] h-[50px] px-4 text-base rounded-[20px] placeholder:text-gray-500 shadow-md"
+              className="w-full sm:w-[600px] h-[50px] px-4 text-base rounded-[20px] placeholder:text-gray-500 shadow-md"
             />
+
             <button
               onClick={handleSearch}
-              className="w-[212px] h-[54px] bg-[#2E2E2E] text-white font-semibold rounded-[20px] shadow-md hover:bg-gray-200 transition"
+              className="w-full sm:w-[212px] h-[54px] bg-[#2E2E2E] text-white font-semibold rounded-[20px] shadow-md hover:bg-gray-200 transition"
               disabled={loading}
             >
               {loading ? 'Поиск...' : 'Проверить'}
             </button>
+
           </div>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="flex-grow px-6 md:px-12 py-10 max-w-full text-base">
+      <main className="flex-grow px-4 sm:px-6 md:px-12 py-10 w-full max-w-screen-lg mx-auto text-base">
+
         {error && <p className="text-red-500 text-center">{error}</p>}
 
         {debtInfo && (
-          <div className="flex justify-start">
-            <div className="space-y-6 w-full max-w-[500px]">
+          <div className="flex justify-center">
+            <div className="space-y-6 w-full px-4 sm:px-0">
               <div>
                 <h2 className="text-lg font-bold mb-2">{debtInfo.address}</h2>
                 <p className="mb-1">

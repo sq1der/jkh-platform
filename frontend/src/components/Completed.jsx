@@ -43,20 +43,18 @@ const CompletedProjects = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-center text-[#0075C9] py-10">
           ЗАВЕРШЕННЫЕ ОБЪЕКТЫ
         </h1>
-
         <div className="flex flex-wrap justify-center gap-6">
           {projects.map((project, index) => {
-            // Вызываем getImageUrls здесь, для КАЖДОГО проекта
-            const images = getImageUrls(project); // <-- ИСПРАВЛЕНИЕ: Перемещено сюда
-
+            const images = getImageUrls(project);
+          
             return (
               <div
                 key={index}
-                className="w-[680px] h-[408px] bg-white rounded-xl shadow-md border border-gray-300 flex overflow-hidden"
+                className="w-full max-w-[680px] bg-white rounded-xl shadow-md border border-gray-300 flex flex-col md:flex-row overflow-hidden"
               >
-                <div className="w-[476px] p-6 flex flex-col justify-between">
+                <div className="w-full md:w-[60%] p-4 md:p-6 flex flex-col justify-between">
                   <div>
-                    <h2 className="text-xl font-semibold mb-2 leading-snug">
+                    <h2 className="text-lg md:text-xl font-semibold mb-2 leading-snug">
                       {project.name}
                     </h2>
                     <p className="text-sm font-semibold">
@@ -71,20 +69,20 @@ const CompletedProjects = () => {
                   </div>
                   <Link
                     to={`/projects/${project.id}`}
-                    className="text-blue-600 hover:underline font-medium"
+                    className="text-blue-600 hover:underline font-medium mt-4"
                   >
                     подробно
                   </Link>
                 </div>
-                <div className="w-[204px] h-[408px]">
+            
+                <div className="w-full md:w-[40%] min-h-[200px] md:min-h-full">
                   <Slider dots infinite speed={500} slidesToShow={1} slidesToScroll={1}>
-                    {/* Используем images, определенные для текущего проекта */}
                     {images.map((url, i) => (
                       <img
                         key={i}
                         src={url}
                         alt={`Project ${project.name} Image ${i + 1}`}
-                        className="w-[204px] h-[408px] object-cover"
+                        className="w-full h-full object-cover aspect-[2/1]"
                       />
                     ))}
                   </Slider>
@@ -93,6 +91,8 @@ const CompletedProjects = () => {
             );
           })}
         </div>
+
+        
       </div>
 
       {/* Footer */}
