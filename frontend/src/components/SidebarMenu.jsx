@@ -36,6 +36,7 @@ const SidebarMenu = () => {
   }, [menuOpen]);
 
   return (
+    
   <>
     {!menuOpen && (
       <button
@@ -99,7 +100,7 @@ const SidebarMenu = () => {
           }}
           className="text-left"
         >
-          ДЛЯ УЧАСТИЯ МОДЕРНИЗАЦИИ
+          ДЛЯ УЧАСТИЯ В МОДЕРНИЗАЦИИ
         </button>
       </nav>
     </div>
