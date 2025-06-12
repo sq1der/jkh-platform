@@ -70,6 +70,7 @@ for row in sheet.iter_rows(min_row=2, values_only=True):
         building = Building.objects.get(house=house)
     except Building.DoesNotExist:
         print(f"❌ Здание '{house}' не найдено для дома {house.house_number}")
+        continue
 
     # Формируем адрес
     full_address = f"ул. {street.name}, дом {house.house_number}, кв. {flat_no}"
