@@ -92,13 +92,15 @@ const SidebarMenu = () => {
         >
           ПОСМОТРЕТЬ ЗАДОЛЖЕННОСТЬ
         </button>
-        <a
-          href="/docs/ДЛЯ УЧАСТИЯ В МОДЕРНИЗАЦИИ.docx"
-          download
+        <button
+          onClick={() => {
+            navigate('/modernization');
+            setMenuOpen(false);
+          }}
           className="text-left"
         >
-          ДЛЯ УЧАСТИЯ В МОДЕРНИЗАЦИИ
-        </a>
+          ДЛЯ УЧАСТИЯ МОДЕРНИЗАЦИИ
+        </button>
       </nav>
     </div>
   </>

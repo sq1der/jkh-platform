@@ -12,6 +12,8 @@ import Projects from './components/Completed';
 import ProjectPage from './components/ProjectPage';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
+import ModernizationPage from './components/ModernizationPage';
+
 
 
 const App = () => {
@@ -31,6 +33,7 @@ const App = () => {
         <Route path="/projects/:id" element={<ProjectPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/modernization" element={<ModernizationPage />} />
       </Routes>
     </Router>
   );
