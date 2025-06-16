@@ -2,23 +2,26 @@ from django.db import models
 import uuid
 from .house import House
 
+
 class Building(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
 
-    house = models.ForeignKey(House, on_delete=models.CASCADE, related_name="buildings")
-
+    house = models.ForeignKey(
+        House, on_delete=models.CASCADE, related_name="buildings")
 
     district = models.CharField(max_length=255)
-    
+
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
-    
+
     total_residents = models.IntegerField()
     total_debtors = models.IntegerField(default=0)
-    total_debt = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    total_square = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    
+    total_debt = models.DecimalField(
+        max_digits=15, decimal_places=2, default=0.00)
+    total_square = models.DecimalField(
+        max_digits=15, decimal_places=2, default=0.00)
+
     description = models.TextField()
     image_url = models.URLField(blank=True, null=True)
     image_url_2 = models.URLField(blank=True, null=True)
@@ -31,6 +34,9 @@ class Building(models.Model):
     year_built = models.IntegerField()
     building_type = models.CharField(max_length=255)
     number_of_apartments = models.IntegerField()
+
+    is_visible = models.BooleanField(
+        default=True, help_text="Показывать ли объект на сайте")
 
     def __str__(self):
         return f"Building {self.name} at {self.house}"

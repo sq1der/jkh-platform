@@ -43,12 +43,14 @@ from .reports.utils import generate_building_report
 
 User = get_user_model()
 
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
+
 
 class DebtorViewSet(viewsets.ModelViewSet):
     queryset = Debtor.objects.all()
@@ -67,7 +69,8 @@ class DebtorViewSet(viewsets.ModelViewSet):
         from_date = params.get('from_date')
         to_date = params.get('to_date')
         if from_date and to_date:
-            queryset = queryset.filter(last_payment__range=[from_date, to_date])
+            queryset = queryset.filter(
+                last_payment__range=[from_date, to_date])
         elif from_date:
             queryset = queryset.filter(last_payment__gte=from_date)
         elif to_date:
@@ -86,24 +89,28 @@ class DebtorViewSet(viewsets.ModelViewSet):
 
 
 class BuildingViewSet(viewsets.ModelViewSet):
-    queryset = Building.objects.select_related('house').all()
+    queryset = Building.objects.filter(is_visible=True)
     serializer_class = BuildingSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    
+
+
 class ExcelUploadViewSet(viewsets.ModelViewSet):
     queryset = ExcelUpload.objects.all()
     serializer_class = ExcelUploadSerializer
     permission_classes = [IsAuthenticated]
 
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
+
 
 class DebtSearchView(APIView):
     permission_classes = [AllowAny]
@@ -140,7 +147,8 @@ class LoginWithEmailView(APIView):
                 'refresh': tokens['refresh'],
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class LoginWithIINView(APIView):
     permission_classes = [AllowAny]
 
@@ -182,7 +190,7 @@ class ExcelUploadView(APIView):
                 'message': 'Обработка завершена с ошибками',
                 'errors': upload.error_log
             }, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 class PasswordResetRequestView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -202,7 +210,8 @@ class PasswordResetRequestView(generics.GenericAPIView):
         reset = PasswordResetToken.objects.create(user=user)
 
         reset_link = f"{settings.FRONTEND_URL}/reset-password/{reset.token}/"
-        html = render_to_string("emails/password_reset.html", {"link": reset_link, "user": user})
+        html = render_to_string(
+            "emails/password_reset.html", {"link": reset_link, "user": user})
         send_mail(
             subject="Сброс пароля ЖКХ‑портал",
             message=f"Перейдите по ссылке для сброса пароля: {reset_link}",
@@ -222,7 +231,8 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         try:
-            reset = PasswordResetToken.objects.select_related("user").get(token=serializer.validated_data["token"])
+            reset = PasswordResetToken.objects.select_related(
+                "user").get(token=serializer.validated_data["token"])
         except PasswordResetToken.DoesNotExist:
             return Response({"detail": "Неверный токен."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -240,7 +250,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         return Response({"detail": "Пароль обновлён.",
                          "access": tokens["access"],
                          "refresh": tokens["refresh"]}, status=status.HTTP_200_OK)
-    
+
 
 def get_debt_info(request):
     personal_account = request.GET.get('personal_account')
@@ -298,7 +308,8 @@ def download_building_report(request, building_id):
     wb = generate_building_report(building)
 
     now = timezone.now().strftime("%Y-%m-%d_%H-%M")
-    filename = f"{building.house.street.name}_{building.house.house_number}_{now}.xlsx".replace(' ', '_')
+    filename = f"{building.house.street.name}_{building.house.house_number}_{now}.xlsx".replace(
+        ' ', '_')
 
     from io import BytesIO
     virtual_file = BytesIO()
@@ -311,16 +322,19 @@ def download_building_report(request, building_id):
     report_history.file.save(filename, ContentFile(virtual_file.read()))
     report_history.save()
 
-    virtual_file.seek(0) 
+    virtual_file.seek(0)
     return FileResponse(virtual_file, as_attachment=True, filename=filename)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_report_history(request, building_id=None):
     if building_id:
-        reports = ReportHistory.objects.filter(building_id=building_id).order_by('-created_at')
+        reports = ReportHistory.objects.filter(
+            building_id=building_id).order_by('-created_at')
     else:
         reports = ReportHistory.objects.all().order_by('-created_at')
 
-    serializer = ReportHistorySerializer(reports, many=True, context={'request': request})
+    serializer = ReportHistorySerializer(
+        reports, many=True, context={'request': request})
     return Response(serializer.data)
