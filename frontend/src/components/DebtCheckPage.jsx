@@ -12,10 +12,7 @@ function DebtInfoPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!debtInfo && personal_account) {
-      handleSearch(); // Запросить данные, если их нет
-    }
-  }, [personal_account, debtInfo]);
+  }, []);
 
 
   const handleSearch = async () => {
