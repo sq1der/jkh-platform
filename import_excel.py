@@ -1,3 +1,4 @@
+# замените your_app на имя вашего приложения
 import openpyxl
 from django.db import IntegrityError
 import os
@@ -7,20 +8,22 @@ from datetime import date
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 django.setup()
 
-from core.models import Street, House, Building  # замените your_app на имя вашего приложения
-
+from core.models import Street, House, Building
 # 🧹 Функция очистки ячеек
+
 def clean_int(cell):
     try:
         return int(str(cell).replace('\xa0', '').strip())
     except (ValueError, TypeError):
         return None
 
+
 def clean_str(cell):
     try:
         return str(cell).replace('\xa0', ' ').strip()
     except:
         return ""
+
 
 # 📄 Загружаем Excel
 wb = openpyxl.load_workbook("srv1061_to_pes_2024 апрель.xlsx")
@@ -30,8 +33,8 @@ sheet = wb.active
 added_streets = 0
 added_houses = 0
 skipped_houses = 0
-added_buildings = 0 
-skipped_buildings = 0 
+added_buildings = 0
+skipped_buildings = 0
 
 for row in sheet.iter_rows(min_row=2, values_only=True):
     # 🎯 Получаем значения из строки
@@ -80,12 +83,13 @@ for row in sheet.iter_rows(min_row=2, values_only=True):
             total_square=2899.40,
             description="Полная замена устаревших трубопроводов протяжённостью более 5 км, установка автоматизированных теплопунктов и внедрение системы удалённого мониторинга. Благодаря проекту улучшено теплоснабжение для 15 многоквартирных домов.",
             image_url=None,
-            start_date = date(2023, 6, 1),
-            end_date = date(2024, 3, 1),    
+            start_date=date(2023, 6, 1),
+            end_date=date(2024, 3, 1),
             object_type="Жилой многоквартирный дом",
             year_built=2000,
             building_type="Монолитный",
-            number_of_apartments=1000
+            number_of_apartments=1000,
+            is_visible=False
         )
         print(f"Добавлено здание: {building.name} (дом {house.house_number})")
     except Exception as e:
@@ -102,4 +106,3 @@ print(f"➕ Домов добавлено: {added_houses}")
 print(f"⏭️ Домов пропущено (уже есть): {skipped_houses}")
 print(f"🏢 Зданий добавлено: {added_buildings}")
 print(f"⏭️ Зданий пропущено (уже есть): {skipped_buildings}")
-

@@ -111,14 +111,6 @@ function DebtInfoPage() {
                 </p>
               </div>
         
-              <div>
-                <h3 className="text-lg font-bold mb-4">Информация об объекте</h3>
-                <p><span className="font-bold">Тип объекта:</span> {debtInfo.object_type}</p>
-                <p><span className="font-bold">Год постройки:</span> {debtInfo.build_year}</p>
-                <p><span className="font-bold">Тип дома:</span> {debtInfo.house_type}</p>
-                <p><span className="font-bold">Количество жильцов:</span> {debtInfo.total_residents}</p>
-                <p><span className="font-bold">Количество квартир:</span> {debtInfo.apartments_count}</p>
-              </div>
             </div>
           </div>
         )}
